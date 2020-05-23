@@ -10,3 +10,8 @@ npm-debug.log
 yarn-error.log
 .env
 public/storage/.gitignore
+storage/logs/
+public/data/category/
+public/data/file/
+public/.rnd
+.vscode/

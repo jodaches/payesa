@@ -20,7 +20,7 @@
                     <div class="box-body">
                         <div class="fields-group">
                             <div class="form-group  {{ $errors->has('user_id') ? ' has-error' : '' }}">
-                                <label for="user_id" class="col-sm-2 asterisk control-label">{{ trans('order.select_customer') }}</label>
+                                <label for="user_id" class="col-sm-2 asterisk form-label">{{ trans('order.select_customer') }}</label>
                                 <div class="col-sm-8">
                                     <select class="form-control user_id select2" style="width: 100%;" name="user_id" >
                                         <option value=""></option>
@@ -161,7 +161,7 @@
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-                                        <input style="width: 150px" type="text" id="phone" name="phone" value="{!! old('phone') !!}" class="form-control phone" placeholder="Input Phone" />
+                                        <input style="width: 150px" type="text" id="phone" name="phone" value="{!! old('phone') !!}" class="form-control phone" placeholder="" />
                                     </div>
                                         @if ($errors->has('phone'))
                                             <span class="help-block">
@@ -172,11 +172,11 @@
                             </div>
                         @endif
 
-                            <div class="form-group   {{ $errors->has('currency') ? ' has-error' : '' }}">
+                            <div class="form-group   {{ $errors->has('currency') ? ' has-error' : '' }}" style="display: none">
                                 <label for="currency" class="col-sm-2 asterisk control-label">{{ trans('order.currency') }}</label>
                                 <div class="col-sm-8">
                                     <select class="form-control currency select2" style="width: 100%;" name="currency" >
-                                        <option value=""></option>
+                                        {{-- <option value=""></option> --}}
                                       @foreach ($currencies as $k => $v)
                                             <option value="{{ $k }}" {{ (old('currency') ==$k) ? 'selected':'' }}>{{ $v}}</option>
                                         @endforeach
@@ -189,12 +189,13 @@
                                 </div>
                             </div>
 
-                            <div class="form-group   {{ $errors->has('exchange_rate') ? ' has-error' : '' }}">
+                            <div class="form-group   {{ $errors->has('exchange_rate') ? ' has-error' : '' }}" style="display: none">
                                 <label for="exchange_rate" class="col-sm-2 col-form-label">{{ trans('order.exchange_rate') }}</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-money fw" aria-hidden="true"></i></span>
-                                        <input style="width: 150px" type="text" id="exchange_rate" name="exchange_rate" value="{!! old('exchange_rate') !!}" class="form-control exchange_rate" placeholder="Input Exchange rate" />
+                                        <input style="width: 150px" type="text" id="exchange_rate" name="exchange_rate" 
+                                        value="{!! old('exchange_rate') ?? 1 !!}" class="form-control exchange_rate" placeholder="Input Exchange rate" />
                                     </div>
                                         @if ($errors->has('exchange_rate'))
                                             <span class="help-block">
@@ -210,7 +211,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group   {{ $errors->has('payment_method') ? ' has-error' : '' }}">
+                            <div class="form-group   {{ $errors->has('payment_method') ? ' has-error' : '' }}" style="display: none">
                                 <label for="payment_method" class="col-sm-2 col-form-label">{{ trans('order.payment_method') }}</label>
                                 <div class="col-sm-8">
                                     <select class="form-control payment_method select2" style="width: 100%;" name="payment_method">
@@ -226,7 +227,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group   {{ $errors->has('shipping_method') ? ' has-error' : '' }}">
+                            <div class="form-group   {{ $errors->has('shipping_method') ? ' has-error' : '' }}" style="display: none">
                                 <label for="shipping_method" class="col-sm-2 col-form-label">{{ trans('order.shipping_method') }}</label>
                                 <div class="col-sm-8">
                                     <select class="form-control shipping_method select2" style="width: 100%;" name="shipping_method">

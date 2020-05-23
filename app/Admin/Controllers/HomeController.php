@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Models\AdminMenu;
 use App\Http\Controllers\Controller;
 use App\Models\ShopNews;
 use App\Models\ShopOrder;
@@ -16,6 +17,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+        AdminMenu::getListVisible();
         $data = [];
         $data['title'] = trans('admin.dashboard');
         $data['users'] = new ShopUser;

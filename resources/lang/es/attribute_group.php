@@ -1,0 +1,27 @@
+<?php
+return [
+    'id'     => 'ID',
+    'name'   => 'Nombre',
+    'status' => 'Estado',
+    'type'   => 'Forma de mostrar',
+    'admin'  => [
+        'title'          => 'Grupos de atributos',
+        'create_success' => 'Creado exitosamente',
+        'edit_success'   => 'Editado exitosamente',
+        'list'           => 'Grupos de atriutos',
+        'id'             => 'ID',
+        'name'           => 'Nombre',
+        'status'         => 'Estado',
+        'action'         => 'Acción',
+        'edit'           => 'Editar',
+        'export'         => 'Exportar',
+        'delete'         => 'Borrar',
+        'update'        => 'Actualizar',
+        'result_item'    => 'Mostrando <b>:item_from</b> al <b>:item_to</b> de <b>:item_total</b> elementos</b>',
+        'sort'           => 'Ordenar',
+        'search'         => 'Buscar',
+        'add_new'        => 'Nuevo',
+        'add_new_title'  => 'Agregar grupo de atributos',
+        'add_new_des'    => 'Crear grupo de atributos',
+    ],
+];

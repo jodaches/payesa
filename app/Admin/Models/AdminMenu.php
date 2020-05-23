@@ -50,11 +50,13 @@ class AdminMenu extends Model
         $list = self::getList();
         $listVisible = [];
         $admin = \Admin::user();
-        foreach ($list as  $menu) {
+        foreach ($list as $menu) {
             $allPermissionsMenuAllow = $menu->permissions
+                ->pluck('slug')->flatten()->toArray();            
+
+            $allRolesMenuAllow = $menu->roles
                 ->pluck('slug')->flatten()->toArray();
-            $allRolesMenuAllow       = $menu->roles
-                ->pluck('slug')->flatten()->toArray();
+
             if ((!count($allPermissionsMenuAllow) 
             && !count($allRolesMenuAllow))
             || $admin->isAdministrator() 

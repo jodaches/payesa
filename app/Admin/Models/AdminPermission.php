@@ -31,7 +31,7 @@ class AdminPermission extends Model
      */
     public function shouldPassThrough(Request $request): bool
     {
-
+        
         if (empty($this->http_uri)) {
             return false;
         }
@@ -50,7 +50,6 @@ class AdminPermission extends Model
                 return true;
             }
         }
-
         return false;
     }
 

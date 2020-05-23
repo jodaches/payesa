@@ -45,9 +45,9 @@ class ShopCustomerController extends Controller
             'email' => trans('customer.email'),
             'name' => trans('customer.name'),
             'phone' => trans('customer.phone'),
-            'address1' => trans('customer.address1'),
-            'address2' => trans('customer.address2'),
-            'country' => trans('customer.country'),
+            'address1' => trans('customer.address'),
+            // 'address2' => trans('customer.address2'),
+            // 'country' => trans('customer.country'),
             'status' => trans('customer.status'),
             'created_at' => trans('customer.created_at'),
             'action' => trans('customer.admin.action'),
@@ -85,8 +85,8 @@ class ShopCustomerController extends Controller
                 'name' => $row['name'],
                 'phone' => $row['phone'],
                 'address1' => $row['address1'],
-                'address2' => $row['address2'],
-                'country' => $this->countries[$row['country']]->name ?? '',
+                // 'address2' => $row['address2'],
+                // 'country' => $this->countries[$row['country']]->name ?? '',
                 'status' => $row['status'] ? '<span class="label label-success">ON</span>' : '<span class="label label-danger">OFF</span>',
                 'created_at' => $row['created_at'],
                 'action' => '
@@ -298,7 +298,7 @@ Need mothod destroy to boot deleting in model
             $dataUpdate['address2'] = $data['address2']??'';
         }
         if(sc_config('customer_phone')) {
-            $validate['phone'] = 'required|regex:/^0[^0][0-9\-]{7,13}$/';
+            $validate['phone'] = 'string';
             $dataUpdate['phone'] = $data['phone']??'';
         }
         if(sc_config('customer_country')) {

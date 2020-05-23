@@ -90,6 +90,7 @@ class PermissionController extends Controller
         foreach ($dataTmp as $key => $row) {
             $permissions = '';
             if ($row['http_uri']) {
+                $http_uri = preg_replace('/\s\s+/', '', $row['http_uri']);
                 $methods = array_map(function ($value) {
                     $route = explode('::', $value);
                     $methodStyle = '';
@@ -102,7 +103,7 @@ class PermissionController extends Controller
                         $methodStyle = '<span class="label label-primary">' . $route[0] . '</span>';
                     }
                     return $methodStyle . ' <code>' . $route[1] . '</code>';
-                }, explode(',', $row['http_uri']));
+                }, explode(',', $http_uri));
                 $permissions = implode('<br>', $methods);
             }
             $dataTr[] = [

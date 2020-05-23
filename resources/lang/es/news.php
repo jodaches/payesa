@@ -1,0 +1,41 @@
+<?php
+
+return [
+    'id' => 'ID',
+    'title' => 'Title',
+    'alias'                 => 'Url customize <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span>',
+    'alias_validate'        => 'Maximum 100 characters in the group: "A-Z", "a-z", "0-9" and "-_" ',
+    'keyword' => 'Keyword',
+    'description' => 'Description',
+    'content' => 'Content',
+    'image' => 'Image',
+    'status' => 'Status',
+    'sort' => 'Ordenar',
+    'help_top' => 'Display this category out site',
+    'admin' => [
+        'title' => 'Blog/News ',
+        'create_success' => 'Creado exitosamente',
+        'edit_success' => 'Editado exitosamente',
+        'list' => 'Blog/News manager',
+        'action' => 'Acción',
+        'delete' => 'Borrar',
+        'edit' => 'Editar',
+        'add_new' => 'Nuevo',
+        'add_new_title' => 'Nuevo blog',
+        'add_new_des' => 'Create a new blog',
+        'export' => 'Exportar',
+        'update' => 'Actualizar',
+        'result_item' => 'Showing <b>:item_from</b> to <b>:item_to</b> of <b>:item_total</b> items</b>',
+        'sort' => 'Ordenar',
+        'select_category' => 'Select category',
+
+        'sort_order' => [
+            'id_asc' => 'ID asc',
+            'id_desc' => 'ID desc',
+            'title_asc' => 'Titulo asc',
+            'title_desc' => 'Titulo desc',
+        ],
+        'search' => 'Buscar',
+        'search_place' => 'Buscar nombre o ID',
+    ],
+];

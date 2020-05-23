@@ -26,6 +26,7 @@ class Permission
      */
     public function handle(Request $request, \Closure $next, ...$args)
     {
+
         if (!Admin::user() || !empty($args) || $this->shouldPassThrough($request) || Admin::user()->isAdministrator()) {
             return $next($request);
         }
@@ -48,10 +49,10 @@ class Permission
             ) {
                 return $next($request);
             } else {
+                dd('hola');
                 return Checker::error();
             }
         }
-
         if (!Admin::user()->allPermissions()->first(function ($permission) use ($request) {
             //Method shouldPassThrough in \App\Admin\Models\AdminPermission ->shouldPassThrough
             return $permission->shouldPassThrough($request);

@@ -18,7 +18,6 @@ class Permission
         if (static::isAdministrator()) {
             return true;
         }
-
         if (is_array($permission)) {
             collect($permission)->each(function ($permission) {
                 call_user_func([Permission::class, 'check'], $permission);

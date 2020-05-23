@@ -251,7 +251,7 @@ class ShopOrderController extends Controller
             $validate['address2'] = 'required|max:100';
         }
         if(sc_config('customer_phone')) {
-            $validate['phone'] = 'required|regex:/^0[^0][0-9\-]{7,13}$/';
+            $validate['phone'] = 'required|string';
         }
         if(sc_config('customer_country')) {
             $validate['country'] = 'required|min:2';

@@ -136,7 +136,7 @@ trait AuthTrait
             $validate['reg_address2'] = 'required|string|max:100';
         }
         if(sc_config('customer_phone')) {
-            $validate['reg_phone'] = 'required|regex:/^0[^0][0-9\-]{7,13}$/';
+            $validate['reg_phone'] = 'required|string';
         }
         if(sc_config('customer_country')) {
             $arraycountry = (new ShopCountry)->pluck('code')->toArray();
