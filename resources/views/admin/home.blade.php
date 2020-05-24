@@ -416,7 +416,7 @@ $('#sliders input').on('input change', function () {
 showValues();
 </script>
 
-<script>
+{{-- <script>
   Highcharts.chart('chart-pie', {
     chart: {
         type: 'pie',
@@ -457,6 +457,6 @@ showValues();
         data: {!! $dataPie !!},
     }]
 });
-</script>
+</script> --}}
 
 @endpush

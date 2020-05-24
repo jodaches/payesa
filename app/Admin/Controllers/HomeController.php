@@ -27,29 +27,29 @@ class HomeController extends Controller
         $data['blogs'] = new ShopNews;
 
         //Country statistics
-        $dataCountries = (new ShopOrder)->getCountryInYear();
-        $arrCountry = ShopCountry::getArray();
-        $arrCountryMap   = [];
-        $ctTotal = 0;
-        $ctTop = 0;
-        foreach ($dataCountries as $key => $country) {
-            $ctTotal +=$country->count;
-            if($key <= 3) {
-                $ctTop +=$country->count;
-                if($key == 0) {
-                    $arrCountryMap[] =  [
-                        'name' => $arrCountry[$country->country],
-                        'y' => $country->count,
-                        'sliced' => true,
-                        'selected' => true,
-                    ];
-                } else {
-                    $arrCountryMap[] =  [$arrCountry[$country->country], $country->count];
-                }
-            }
-        }
-        $arrCountryMap[] = ['Other', ($ctTotal - $ctTop)];
-        $data['dataPie'] = json_encode($arrCountryMap);
+        // $dataCountries = (new ShopOrder)->getCountryInYear();
+        // $arrCountry = ShopCountry::getArray();
+        // $arrCountryMap   = [];
+        // $ctTotal = 0;
+        // $ctTop = 0;
+        // foreach ($dataCountries as $key => $country) {
+        //     $ctTotal +=$country->count;
+        //     if($key <= 3) {
+        //         $ctTop +=$country->count;
+        //         if($key == 0) {
+        //             $arrCountryMap[] =  [
+        //                 'name' => $arrCountry[$country->country],
+        //                 'y' => $country->count,
+        //                 'sliced' => true,
+        //                 'selected' => true,
+        //             ];
+        //         } else {
+        //             $arrCountryMap[] =  [$arrCountry[$country->country], $country->count];
+        //         }
+        //     }
+        // }
+        // $arrCountryMap[] = ['Other', ($ctTotal - $ctTop)];
+        // $data['dataPie'] = json_encode($arrCountryMap);
         //End country statistics
 
 
