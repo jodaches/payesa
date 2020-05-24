@@ -363,4 +363,15 @@ return [
       'min_c' => 'Mínimo :min caracteres',
       'min_v' => 'Mayor a :value',
       'max_v' => 'Menor a :value',
+      'confirm_delete'                    => '¿Seguro que quiere borrar este elemento?',
+      'confirm_delete_yes'                => 'Si, borrarlo',
+      'confirm_delete_no'                 => 'No, cancelar',
+      'confirm_delete_deleted'            => 'Borrado',
+      'confirm_delete_deleted_msg'        => 'El elemento ha sido borrado',
+      'action_admin' => [
+            'are_you_sure'                => '¿Estás seguro?',
+            'delete_warning'              => 'Esta acción no puede disolverse',
+            'confirm_yes'                 => 'Si, adelante',
+            'cancel'                      => 'Cancelar',
+        ],
 ];
