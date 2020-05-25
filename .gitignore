@@ -13,5 +13,6 @@ public/storage/.gitignore
 storage/logs/
 public/data/category/
 public/data/file/
+public/data/product/
 public/.rnd
 .vscode/
