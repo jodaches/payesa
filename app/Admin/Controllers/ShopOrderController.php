@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Admin;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ShopCart;
 use App\Models\ShopAttributeGroup;
 use App\Models\ShopCountry;
 use App\Models\ShopCurrency;
@@ -537,11 +538,28 @@ class ShopOrderController extends Controller
             $item = ShopOrderDetail::find($id);
             $fieldOrg = $item->{$field};
             $orderID = $item->order_id;
+
+            //Update stock
+            if ($field == 'qty') {
+                if(ShopCart::validateStock($item->product_id, $value)){
+                    $checkQty = $value - $fieldOrg;
+                    //Update stock, sold
+                    ShopProduct::updateStock($item->product_id, $checkQty);
+                }else{
+                    $arrayReturn = ['error' => 1, 'msg' => "No hay inventario suficiente"];       
+                    return $arrayReturn;             
+                }
+            }
+            
+            //UPDATE ORDER ITEM
             $item->{$field} = $value;
             $item->total_price = $value * (($field == 'qty') ? $item->price : $item->qty);
             $item->save();
             $item = $item->fresh();
-            $order = ShopOrder::find($orderID);
+            $order = ShopOrder::find($orderID);            
+            
+           
+
             //Add history
             $dataHistory = [
                 'order_id' => $orderID,
@@ -550,13 +568,6 @@ class ShopOrderController extends Controller
                 'order_status_id' => $order->status,
             ];
             (new ShopOrder)->addOrderHistory($dataHistory);
-
-            //Update stock
-            if ($field == 'qty') {
-                $checkQty = $value - $fieldOrg;
-                //Update stock, sold
-                ShopProduct::updateStock($item->product_id, $checkQty);
-            }
 
             //Update total price
             ShopOrderTotal::updateSubTotal($orderID);

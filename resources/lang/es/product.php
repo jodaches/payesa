@@ -4,7 +4,7 @@ return [
     'id'                    => 'ID',
     'sku'                   => 'SKU',
     'alias'                 => 'Url personalizada <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span>',
-    'sku_validate'          => 'Only characters in the group: "A-Z", "a-z", "0-9" and "-_" ',
+    'sku_validate'          => 'Solo caracteres dentro de: "A-Z", "a-z", "0-9" y "-_" ',
     'alias_validate'        => 'Maximum 100 characters in the group: "A-Z", "a-z", "0-9" and "-_" ',
     'description'           => 'Descripción del producto',
     'price'                 => 'Precio',
@@ -68,7 +68,7 @@ return [
         'select_kind'             => 'Seleccione especie de producto',
         'result_item'             => 'Mostrando <b>:item_from</b> al <b>:item_to</b> de <b>:item_total</b> elementos</b>',
         'sort'                    => 'Ordenar',
-
+        'select_supplier'         => 'Seleccionar proveedor',
         'select_category'         => 'Seleccionar categoria',
         'select_product_in_group' => 'Seleccionar productos del grupo',
         'select_product_in_build' => 'Seleccionar productos consolidados',
@@ -94,7 +94,7 @@ return [
             'sold_asc' => 'Vendidos asc',
         ],
         'search'                  => 'Buscar',
-        'search_place'            => 'Buscar nombre, SKU or ID',
+        'search_place'            => 'Nombre, SKU, ID o palabra clave',
         'cant_remove_child'        => 'Elimine primero productos consolidados o grupo antes de borrar el elemento',
     ],
     'types'                 => [

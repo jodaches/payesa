@@ -242,7 +242,7 @@ class ShopProductController extends Controller
                    </div>
                    <div class="btn-group pull-right">
                          <div class="form-group">
-                           <input type="text" name="keyword" class="form-control" placeholder="' . trans('product.admin.search_place') . '" value="' . $keyword . '">
+                           <input style="min-width:225px" type="text" name="keyword" class="form-control" placeholder="' . trans('product.admin.search_place') . '" value="' . $keyword . '">
                          </div>
                    </div>
                 </form>';
@@ -337,10 +337,10 @@ class ShopProductController extends Controller
                     'descriptions.*.name' => 'required|string|max:100',
                     'descriptions.*.keyword' => 'nullable|string|max:100',
                     'descriptions.*.description' => 'nullable|string|max:100',
-                    'descriptions.*.content' => 'required|string',
+                    'descriptions.*.content' => 'nullable|string', //was required
                     'category' => 'required',
                     'sku' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,sku',
-                    'alias' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias|string|max:100',
+                    'alias' => 'regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias|string|max:100',//was required
                 ];
                 $arrMsg = [
                     'descriptions.*.name.required' => trans('validation.required', ['attribute' => trans('product.name')]),
@@ -413,7 +413,7 @@ class ShopProductController extends Controller
         $productBuild = $data['productBuild'] ?? [];
         $productBuildQty = $data['productBuildQty'] ?? [];
         $subImages = $data['sub_image'] ?? [];
-        $supplier_id = $data['supplier_id']?? '';
+        $supplier_id = $data['supplier_id']?? [];
         $dataInsert = [
             'brand_id' => $data['brand_id']??0,
             'supplier_id' => implode(',', $supplier_id ),
@@ -597,10 +597,10 @@ class ShopProductController extends Controller
                     'descriptions.*.name' => 'required|string|max:200',
                     'descriptions.*.keyword' => 'nullable|string|max:200',
                     'descriptions.*.description' => 'nullable|string|max:300',
-                    'descriptions.*.content' => 'required|string',
+                    'descriptions.*.content' => 'nullable|string',//was required
                     'category' => 'required',
                     'sku' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,sku,' . $product->id . ',id',
-                    'alias' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias,' . $product->id . ',id|string|max:100',
+                    'alias' => 'regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias,' . $product->id . ',id|string|max:100', //was required
                 ];
                 $arrMsg = [
                     'descriptions.*.name.required' => trans('validation.required', ['attribute' => trans('product.name')]),
@@ -618,7 +618,7 @@ class ShopProductController extends Controller
                     'descriptions.*.description' => 'nullable|string|max:300',
                     'category' => 'required',
                     'sku' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,sku,' . $product->id . ',id',
-                    'alias' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias,' . $product->id . ',id|string|max:100',
+                    'alias' => 'regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_product,alias,' . $product->id . ',id|string|max:100',//was required
                     'productBuild' => 'required',
                     'productBuildQty' => 'required',
                 ];
@@ -666,7 +666,7 @@ class ShopProductController extends Controller
         $productBuild = $data['productBuild'] ?? [];
         $productBuildQty = $data['productBuildQty'] ?? [];
         $subImages = $data['sub_image'] ?? [];
-        $supplier_id = $data['supplier_id']?? '';
+        $supplier_id = $data['supplier_id']?? [];
         $dataUpdate = [
             'image' => $data['image'] ?? '',
             'tax_id' => $data['tax_id'] ?? 0,

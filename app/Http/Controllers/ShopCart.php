@@ -564,6 +564,11 @@ class ShopCart extends GeneralController
 
     }
 
+    public static function validateStock($product_id, $qty){
+        $product = (new ShopProduct)->getDetail($product_id);
+        return $product->stock >= $qty || sc_config('product_buy_out_of_stock');
+    }
+
     /**
      * Get product in wishlist
      * @return [view]

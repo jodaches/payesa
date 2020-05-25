@@ -65,7 +65,9 @@
                         <div
                             class="form-group  {{ $errors->has('descriptions.'.$code.'.name') ? ' has-error' : '' }}">
                             <label for="{{ $code }}__name"
-                                class="col-sm-2 col-form-label">{{ trans('product.name') }} <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span></label>
+                                class="col-sm-2 col-form-label">{{ trans('product.name') }} *
+                                {{-- <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span> --}}
+                            </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
@@ -89,14 +91,16 @@
                         <div
                             class="form-group    {{ $errors->has('descriptions.'.$code.'.keyword') ? ' has-error' : '' }}">
                             <label for="{{ $code }}__keyword"
-                                class="col-sm-2 col-form-label">{{ trans('product.keyword') }} <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span></label>
+                                class="col-sm-2 col-form-label">{{ trans('product.keyword') }} 
+                                {{-- <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span> --}}
+                            </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
                                     <input type="text" id="{{ $code }}__keyword"
                                         name="descriptions[{{ $code }}][keyword]"
                                         value="{!! old('descriptions.'.$code.'.keyword') !!}"
-                                        class="form-control input-sm {{ $code.'__keyword' }}" placeholder="" />
+                                        class="form-control input-sm {{ $code.'__keyword' }}" placeholder="Para búsquedas" />
                                 </div>
                                 @if ($errors->has('descriptions.'.$code.'.keyword'))
                                 <span class="help-block">
@@ -114,7 +118,9 @@
                         <div
                             class="form-group  {{ $errors->has('descriptions.'.$code.'.description') ? ' has-error' : '' }}">
                             <label for="{{ $code }}__description"
-                                class="col-sm-2 col-form-label">{{ trans('product.description') }} <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span></label>
+                                class="col-sm-2 col-form-label">{{ trans('product.description') }} 
+                                {{-- <span class="seo" title="SEO"><i class="fa fa-coffee" aria-hidden="true"></i></span> --}}
+                            </label>
                             <div class="col-sm-8">
                                     <textarea id="{{ $code }}__description"
                                         name="descriptions[{{ $code }}][description]"
@@ -133,7 +139,7 @@
                         </div>
 
                         <div
-                            class="form-group   kind kind0  {{ $errors->has('descriptions.'.$code.'.content') ? ' has-error' : '' }}">
+                            class="hide form-group   kind kind0  {{ $errors->has('descriptions.'.$code.'.content') ? ' has-error' : '' }}">
                             <label for="{{ $code }}__content"
                                 class="col-sm-2 col-form-label">{{ trans('product.content') }}</label>
                             <div class="col-sm-8">
@@ -166,7 +172,7 @@
                             }
                             @endphp
                             <label for="category"
-                                class="col-sm-2 col-form-label">{{ trans('product.admin.select_category') }}</label>
+                                class="col-sm-2 col-form-label">{{ trans('product.admin.select_category') }}*</label>
                             <div class="col-sm-8">
                                 <select class="form-control input-sm category select2" multiple="multiple"
                                     data-placeholder="{{ trans('product.admin.select_category') }}" style="width: 100%;"
@@ -247,7 +253,7 @@
 
                         {{-- sku --}}
                         <div class="form-group  kind kind0 kind1 kind2 {{ $errors->has('sku') ? ' has-error' : '' }}">
-                            <label for="sku" class="col-sm-2 col-form-label">{{ trans('product.sku') }}</label>
+                            <label for="sku" class="col-sm-2 col-form-label">{{ trans('product.sku') }} *</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
@@ -270,7 +276,7 @@
 
 
                         {{-- alias --}}
-                        <div class="form-group  kind kind0 kind1 kind2 {{ $errors->has('alias') ? ' has-error' : '' }}">
+                        <div class="hide form-group  kind kind0 kind1 kind2 {{ $errors->has('alias') ? ' has-error' : '' }}">
                             <label for="alias" class="col-sm-2 col-form-label">{!! trans('product.alias') !!}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
@@ -559,7 +565,7 @@
 @endif
 
                         {{-- sort --}}
-                        <div class="form-group    {{ $errors->has('sort') ? ' has-error' : '' }}">
+                        <div class="hide form-group    {{ $errors->has('sort') ? ' has-error' : '' }}">
                             <label for="sort" class="col-sm-2 col-form-label">{{ trans('product.sort') }}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">

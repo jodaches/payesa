@@ -64,7 +64,7 @@ return [
         'select_kind'             => 'Select product kind',
         'result_item'             => 'Showing <b>:item_from</b> to <b>:item_to</b> of <b>:item_total</b> items</b>',
         'sort'                    => 'Sort',
-
+        'select_supplier'         => 'Select supplier',
         'select_category'         => 'Select category',
         'select_product_in_group' => 'Select products in group',
         'select_product_in_build' => 'Select products build',

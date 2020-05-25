@@ -459,7 +459,7 @@ function all_editable(){
     });
 
 
-    $('.edit-item-detail').editable({
+    $('.edit-item-detail').editable({        
         ajaxOptions: {
         type: 'post',
         dataType: 'json'
@@ -488,9 +488,9 @@ function all_editable(){
                 alertJs('success', response.msg);
             } else {
               alertJs('error', response.msg);
+              return "";
             }
         }
-
     });
 
     $('.updatePrice').editable({
