@@ -49,7 +49,7 @@
                                     <div class="col-sm-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                            <input type="number" style="width: 100px;" min=0 id="value" name="value"
+                                            <input type="number" style="width: 100px;" min=0 id="value" name="value" step="0.01"
                                                 value="{!! old()?old('value'):$tax['value']??0 !!}"
                                                 class="form-control value" placeholder="" />
                                         </div>

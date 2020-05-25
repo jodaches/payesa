@@ -364,7 +364,7 @@
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                    <input type="number" style="width: 100px;" id="cost" name="cost"
+                                    <input type="number" style="width: 100px;" id="cost" name="cost" step="0.01"
                                         value="{!! old('cost')??0 !!}" class="form-control input-sm cost"
                                         placeholder="" />
                                 </div>
@@ -385,7 +385,7 @@
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                    <input type="number" style="width: 100px;" id="price" name="price"
+                                    <input type="number" style="width: 100px;" id="price" name="price" step="0.01"
                                         value="{!! old('price')??0 !!}" class="form-control input-sm price"
                                         placeholder="" />
                                 </div>
@@ -435,7 +435,7 @@
                                 <div class="price_promotion">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
-                                        <input type="number" style="width: 100px;" id="price_promotion"
+                                        <input type="number" style="width: 100px;" id="price_promotion" step="0.01"
                                             name="price_promotion" value="{!! old('price_promotion')??0 !!}"
                                             class="form-control input-sm price" placeholder="" />
                                         <span title="Remove" class="btn btn-flat btn-sm btn-danger removePromotion"><i

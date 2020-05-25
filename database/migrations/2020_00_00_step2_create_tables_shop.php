@@ -142,14 +142,14 @@ class CreateTablesShop extends Migration
         Schema::create(SC_DB_PREFIX.'shop_order', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
-            $table->integer('subtotal')->nullable()->default(0);
+            $table->float('subtotal')->nullable()->default(0);
             $table->integer('shipping')->nullable()->default(0);
             $table->integer('discount')->nullable()->default(0);
             $table->integer('payment_status')->default(1);
             $table->integer('shipping_status')->default(1);
             $table->integer('status')->default(0);
             $table->integer('tax')->nullable()->default(0);
-            $table->integer('total')->nullable()->default(0);
+            $table->float('total')->nullable()->default(0);
             $table->string('currency', 10);
             $table->float('exchange_rate')->nullable();
             $table->integer('received')->nullable()->default(0);
@@ -177,10 +177,10 @@ class CreateTablesShop extends Migration
             $table->integer('order_id');
             $table->integer('product_id');
             $table->string('name', 100);
-            $table->integer('price')->default(0);
+            $table->float('price')->default(0);
             $table->integer('qty')->default(0);
-            $table->integer('total_price')->default(0);
-            $table->integer('tax')->default(0);
+            $table->float('total_price')->default(0);
+            $table->float('tax')->default(0);
             $table->string('sku', 50);
             $table->string('currency', 10);
             $table->float('exchange_rate')->nullable();
@@ -249,8 +249,8 @@ class CreateTablesShop extends Migration
             $table->string('image', 255)->nullable();
             $table->integer('brand_id')->nullable()->default(0)->index();
             $table->string('supplier_id', 50)->nullable()->index();
-            $table->integer('price')->nullable()->default(0);
-            $table->integer('cost')->nullable()->nullable()->default(0);
+            $table->float('price')->nullable()->default(0);
+            $table->float('cost')->nullable()->nullable()->default(0);
             $table->integer('stock')->nullable()->default(0);
             $table->integer('sold')->nullable()->default(0);
             $table->tinyInteger('type')->nullable()->default(0)->index();
@@ -335,7 +335,7 @@ class CreateTablesShop extends Migration
 
         Schema::create(SC_DB_PREFIX.'shop_product_promotion', function (Blueprint $table) {
             $table->integer('product_id')->primary();
-            $table->integer('price_promotion');
+            $table->float('price_promotion');
             $table->dateTime('date_start')->nullable();
             $table->dateTime('date_end')->nullable();
             $table->integer('status_promotion')->default(1);
