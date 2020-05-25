@@ -31,6 +31,7 @@ class AlterPriceToFloat extends Migration
             $table->float('subtotal')->nullable()->default(0)->change();
             $table->float('tax')->nullable()->default(0)->change();
             $table->float('total')->nullable()->default(0)->change();
+            $table->integer('balance')->nullable()->default(0)->change();
         });
 
         Schema::table(SC_DB_PREFIX.'shop_order_total', function (Blueprint $table) {
@@ -51,8 +52,6 @@ class AlterPriceToFloat extends Migration
      */
     public function down()
     {
-        Schema::table('float', function (Blueprint $table) {
-            //
-        });
+        echo "nothing";
     }
 }
