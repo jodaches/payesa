@@ -2,6 +2,7 @@
 #app/Http/Admin/Controllers/ShopProductController.php
 namespace App\Admin\Controllers;
 
+use App\Admin\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ShopAttributeGroup;
 use App\Models\ShopBrand;
@@ -14,11 +15,14 @@ use App\Models\ShopProductBuild;
 use App\Models\ShopProductDescription;
 use App\Models\ShopProductGroup;
 use App\Models\ShopProductImage;
+use App\Models\ShopProductPromotion;
 use App\Models\ShopSupplier;
 use Validator;
+use DB;
 
 class ShopProductController extends Controller
 {
+    const PROFITS_ROLES = ['gerente','administrator'];
     public $languages, $types, $kinds, $virtuals, $attributeGroup;
 
     public function __construct()
@@ -46,6 +50,7 @@ class ShopProductController extends Controller
 
     public function index()
     {
+        $allowProfits = Admin::user()->inRoles(self::PROFITS_ROLES);
         $data = [
             'title' => trans('product.admin.list'),
             'subTitle' => '',
@@ -55,7 +60,7 @@ class ShopProductController extends Controller
             'topMenuRight' => [],
             'topMenuLeft' => [],
             'urlDeleteItem' => route('admin_product.delete'),
-            'removeList' => 1, // Enable function delete list item
+            'removeList' => $allowProfits, // Enable function delete list item
             'buttonRefresh' => 1, // 1 - Enable button refresh
             'buttonSort' => 1, // 1 - Enable button sort
             'css' => '', 
@@ -69,12 +74,16 @@ class ShopProductController extends Controller
             'name' => trans('product.name'),
             'category' => trans('product.category'),
         ];
-        if(sc_config('product_cost')){
+        if(sc_config('product_cost') && $allowProfits){
             $listTh['cost'] = trans('product.cost');
         }
         if(sc_config('product_price')){
             $listTh['price'] = trans('product.price');
         }
+        if($allowProfits){
+            $listTh['profits'] = trans('product.profits');
+        }
+        $listTh['price_promotion'] = trans('product.price_promotion');
         if(sc_config('product_type')){
             $listTh['type'] = trans('product.type');
         }
@@ -85,7 +94,10 @@ class ShopProductController extends Controller
             $listTh['virtual'] = trans('product.virtual');
         }
         $listTh['status'] = trans('product.status');
-        $listTh['action'] = trans('product.admin.action');
+        $listTh['stock'] = trans('product.stock');
+        if($allowProfits){
+            $listTh['action'] = trans('product.admin.action');
+        }
 
         $keyword = request('keyword') ?? '';
 
@@ -101,9 +113,14 @@ class ShopProductController extends Controller
 
         $tableDescription = (new ShopProductDescription)->getTable();
         $tableProduct = (new ShopProduct)->getTable();
+        $tableProductPromotion = (new ShopProductPromotion)->getTable();
 
         $obj = (new ShopProduct)
             ->leftJoin($tableDescription, $tableDescription . '.product_id', $tableProduct . '.id')
+            ->leftJoin($tableProductPromotion, function($join) use ($tableProductPromotion, $tableProduct){
+                $join->on($tableProductPromotion . '.product_id', $tableProduct . '.id')
+                    ->on($tableProductPromotion . '.status_promotion', DB::raw(1));
+            })
             ->where($tableDescription . '.lang', sc_get_locale());
 
         if ($keyword) {
@@ -151,12 +168,16 @@ class ShopProductController extends Controller
                 'category' => implode(';<br>', $arrName),
                 
             ];
-            if(sc_config('product_cost')){
+            if(sc_config('product_cost') && $allowProfits){
                 $dataMap['cost'] = $row['cost'];
             }
             if(sc_config('product_price')){
                 $dataMap['price'] = $row['price'];
             }
+            if($allowProfits){
+                $dataMap['profits'] = $row['price'] - $row['cost'] ;
+            }
+            $dataMap['price_promotion'] = $row['price_promotion'];
             if(sc_config('product_type')){
                 $dataMap['type'] = $type;
             }
@@ -167,16 +188,19 @@ class ShopProductController extends Controller
                 $dataMap['virtual'] = $this->virtuals[$row['virtual']] ?? $row['virtual'];
             }
             $dataMap['status'] = $row['status'] ? '<span class="label label-success">ON</span>' : '<span class="label label-danger">OFF</span>';
-            $dataMap['action'] = '
-            <a href="' . route('admin_product.edit', ['id' => $row['id']]) . '">
-            <span title="' . trans('product.admin.edit') . '" type="button" class="btn btn-flat btn-primary">
-            <i class="fa fa-edit"></i>
-            </span>
-            </a>&nbsp;
+            $dataMap['stock'] = $row['stock'];
+            if($allowProfits){
+                $dataMap['action'] = '
+                <a href="' . route('admin_product.edit', ['id' => $row['id']]) . '">
+                <span title="' . trans('product.admin.edit') . '" type="button" class="btn btn-flat btn-primary">
+                <i class="fa fa-edit"></i>
+                </span>
+                </a>&nbsp;
 
-            <span onclick="deleteItem(' . $row['id'] . ');"  title="' . trans('admin.delete') . '" class="btn btn-flat btn-danger">
-            <i class="fa fa-trash"></i>
-            </span>';
+                <span onclick="deleteItem(' . $row['id'] . ');"  title="' . trans('admin.delete') . '" class="btn btn-flat btn-danger">
+                <i class="fa fa-trash"></i>
+                </span>';
+            }
             $dataTr[] = $dataMap;
         }
 
@@ -186,6 +210,7 @@ class ShopProductController extends Controller
         $data['resultItems'] = trans('product.admin.result_item', ['item_from' => $dataTmp->firstItem(), 'item_to' => $dataTmp->lastItem(), 'item_total' => $dataTmp->total()]);
 
 //menuRight
+    if($allowProfits){
         $data['menuRight'][] = '<a href="' . route('admin_product.create') . '" class="btn btn-success btn-flat" title="New" id="button_create_new">
         <i class="fa fa-plus"></i><span class="hidden-xs">' . trans('admin.add_new') . '</span>
         </a>';
@@ -194,6 +219,7 @@ class ShopProductController extends Controller
             <i class="fa fa fa-floppy-o"></i> <span class="hidden-xs">' . trans('admin.add_new_multi') . '</span>
             </a>';
         }
+    }
 //=menuRight
 
 //menuSort        

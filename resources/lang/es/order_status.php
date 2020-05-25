@@ -2,7 +2,7 @@
 return [
     'name'  => 'Nombre',
     'admin' => [
-        'title'          => 'Order status',
+        'title'          => 'Estados de orden',
         'create_success' => 'Creado exitosamente',
         'edit_success'   => 'Editado exitosamente',
         'list'           => 'Estados de orden',
