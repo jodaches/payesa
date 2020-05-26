@@ -12,6 +12,7 @@ use App\Models\ShopLanguage;
 use App\Models\ShopProduct;
 use App\Models\ShopProductAttribute;
 use App\Models\ShopProductBuild;
+use App\Models\ShopProductCategory;
 use App\Models\ShopProductDescription;
 use App\Models\ShopProductGroup;
 use App\Models\ShopProductImage;
@@ -102,6 +103,7 @@ class ShopProductController extends Controller
         $keyword = request('keyword') ?? '';
 
         $sort_order = request('sort_order') ?? 'id_desc';
+        $category_filter = request('category_filter') ?? '';
 
         $arrSort = [
             'id__desc' => trans('product.admin.sort_order.id_desc'),
@@ -114,6 +116,7 @@ class ShopProductController extends Controller
         $tableDescription = (new ShopProductDescription)->getTable();
         $tableProduct = (new ShopProduct)->getTable();
         $tableProductPromotion = (new ShopProductPromotion)->getTable();
+        $tableProductCategory = (new ShopProductCategory)->table;
 
         $obj = (new ShopProduct)
             ->leftJoin($tableDescription, $tableDescription . '.product_id', $tableProduct . '.id')
@@ -130,6 +133,10 @@ class ShopProductController extends Controller
                 ->orWhere($tableDescription . '.description', 'like', '%' . $keyword . '%')
                 ->orWhere($tableProduct . '.sku', 'like', '%' . $keyword . '%');
             });
+        }
+        if ((int) $category_filter) {
+            $obj = $obj->join($tableProductCategory, $tableProductCategory . '.product_id', $tableProduct . '.id')
+                ->where($tableProductCategory . '.category_id', $category_filter);
         }
 
         if ($sort_order && array_key_exists($sort_order, $arrSort)) {
@@ -232,6 +239,12 @@ class ShopProductController extends Controller
 //=menuSort
 
 //topMenuRight
+        $categories = ShopCategory::pluck('alias','id');
+        $categoryFliterOptions = '';
+        foreach ($categories as $catId => $catAlias) {
+            $categoryFliterOptions .= '<option  ' . (($category_filter == $catId) ? "selected" : "") . ' value="' . $catId . '">' . $catAlias . '</option>';
+        }
+
         $data['topMenuRight'][] ='
                 <form action="' . route('admin_product.index') . '" id="button_search">
                    <div onclick="$(this).submit();" class="btn-group pull-right">
@@ -245,6 +258,16 @@ class ShopProductController extends Controller
                            <input style="min-width:225px" type="text" name="keyword" class="form-control" placeholder="' . trans('product.admin.search_place') . '" value="' . $keyword . '">
                          </div>
                    </div>
+
+                   <div class="btn-group pull-right"  style="margin-right: 10px">
+                        <div class="form-group">
+                           <select class="form-control" name="category_filter">
+                             <option value="">' . trans('product.category') . '</option>
+                             ' . $categoryFliterOptions . '
+                            </select>
+                        </div>
+                    </div>
+
                 </form>';
 //=topMenuRight
 

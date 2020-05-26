@@ -77,8 +77,8 @@ class ShopOrderController extends Controller
             'shipping' => trans('order.admin.shipping'),
             'discount' => trans('order.admin.discount'),
             'total' => trans('order.admin.total'),
-            'payment_method' => trans('order.admin.payment_method_short'),
-            'currency' => trans('order.admin.currency'),
+            // 'payment_method' => trans('order.admin.payment_method_short'),
+            // 'currency' => trans('order.admin.currency'),
             'status' => trans('order.admin.status'),
             'created_at' => trans('order.admin.created_at'),
             'action' => trans('order.admin.action'),
@@ -124,8 +124,8 @@ class ShopOrderController extends Controller
                 'shipping' => sc_currency_render_symbol($row['shipping'] ?? 0, $row['currency']),
                 'discount' => sc_currency_render_symbol($row['discount'] ?? 0, $row['currency']),
                 'total' => sc_currency_render_symbol($row['total'] ?? 0, $row['currency']),
-                'payment_method' => $row['payment_method'],
-                'currency' => $row['currency'] . '/' . $row['exchange_rate'],
+                // 'payment_method' => $row['payment_method'],
+                // 'currency' => $row['currency'] . '/' . $row['exchange_rate'],
                 'status' => $styleStatus[$row['status']],
                 'created_at' => $row['created_at'],
                 'action' => '
@@ -319,12 +319,12 @@ class ShopOrderController extends Controller
         ];
         $order = ShopOrder::create($dataInsert);
         ShopOrderTotal::insert([
-            ['code' => 'subtotal', 'value' => 0, 'title' => 'Subtotal', 'sort' => 1, 'order_id' => $order->id],
+            ['code' => 'subtotal', 'value' => 0, 'title' => 'Sub-total', 'sort' => 1, 'order_id' => $order->id],
             ['code' => 'tax', 'value' => 0, 'title' => 'Tax', 'sort' => 2, 'order_id' => $order->id],
-            ['code' => 'shipping', 'value' => 0, 'title' => 'Shipping', 'sort' => 10, 'order_id' => $order->id],
-            ['code' => 'discount', 'value' => 0, 'title' => 'Discount', 'sort' => 20, 'order_id' => $order->id],
+            ['code' => 'shipping', 'value' => 0, 'title' => 'Envío', 'sort' => 10, 'order_id' => $order->id],
+            ['code' => 'discount', 'value' => 0, 'title' => 'Descuento', 'sort' => 20, 'order_id' => $order->id],
             ['code' => 'total', 'value' => 0, 'title' => 'Total', 'sort' => 100, 'order_id' => $order->id],
-            ['code' => 'received', 'value' => 0, 'title' => 'Received', 'sort' => 200, 'order_id' => $order->id],
+            ['code' => 'received', 'value' => 0, 'title' => 'Recibido', 'sort' => 200, 'order_id' => $order->id],
         ]);
 //
         return redirect()->route('admin_order.index')->with('success', trans('order.admin.create_success'));
@@ -476,7 +476,7 @@ class ShopOrderController extends Controller
         $add_price = request('add_price');
         $add_qty = request('add_qty');
         $add_att = request('add_att');
-        $add_tax = request('add_tax');
+        $add_tax = request('add_tax') ?? [];
         $order_id = request('order_id');
         $items = [];
         $order = ShopOrder::find($order_id);
@@ -493,7 +493,7 @@ class ShopOrderController extends Controller
                     'price' => $add_price[$key],
                     'total_price' => $add_price[$key] * $add_qty[$key],
                     'sku' => $product->sku,
-                    'tax' => $add_tax[$key],
+                    'tax' => $add_tax[$key] ?? 0,
                     'attribute' => $pAttr,
                     'currency' => $order->currency,
                     'exchange_rate' => $order->exchange_rate,

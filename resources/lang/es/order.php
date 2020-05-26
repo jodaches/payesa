@@ -76,7 +76,7 @@ return [
         'create_success'       => 'Nueva orden creada',
         'list'                 => 'Órdenes',
         'id'                   => 'ID',
-        'email'                => 'Corre',
+        'email'                => 'Correo',
         'subtotal'             => 'Subtotal',
         'shipping'             => 'Envío',
         'discount'             => 'Descuento',

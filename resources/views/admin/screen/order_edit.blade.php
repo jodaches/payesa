@@ -18,7 +18,7 @@
                       <a href="{{ route('admin_order.export_detail').'?order_id='.$order->id.'&type=pdf' }}" class="btn btn-sm btn-flat btn-warning" title="Export"><i class="fa fa-file-pdf-o"></i><span class="hidden-xs"> PDF</span></a>
                   </div> --}}
                   <div class="btn-group pull-right" style="margin-right: 10px;border:1px solid #c5b5b5;">
-                      <a class="btn btn-sm btn-flat" title="Export" onclick="order_print()"><i class="fa fa-print"></i><span class="hidden-xs"> Print</span></a>
+                      <a class="btn btn-sm btn-flat" title="Export" onclick="order_print()"><i class="fa fa-print"></i><span class="hidden-xs"> Imprimir</span></a>
                   </div>
               </div>
           </div>
@@ -122,7 +122,7 @@
                     <th class="product_price">{{ trans('product.price') }}</th>
                     <th class="product_qty">{{ trans('product.quantity') }}</th>
                     <th class="product_total">{{ trans('product.total_price') }}</th>
-                    <th class="product_tax">{{ trans('product.tax') }}</th>
+                    {{-- <th class="product_tax">{{ trans('product.tax') }}</th> --}}
                     <th>{{ trans('admin.action') }}</th>
                   </tr>
                 </thead>
@@ -145,7 +145,7 @@
                             <td class="product_price"><a href="#" class="edit-item-detail" data-value="{{ $item->price }}" data-name="price" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('product.price') }}">{{ $item->price }}</a></td>
                             <td class="product_qty">x <a href="#" class="edit-item-detail" data-value="{{ $item->qty }}" data-name="qty" data-type="number" min=0 data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.qty') }}"> {{ $item->qty }}</a></td>
                             <td class="product_total item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_price,$order->currency)}}</td>
-                            <td class="product_tax"><a href="#" class="edit-item-detail" data-value="{{ $item->tax }}" data-name="tax" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.tax') }}"> {{ $item->tax }}</a></td>
+                            {{-- <td class="product_tax"><a href="#" class="edit-item-detail" data-value="{{ $item->tax }}" data-name="tax" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.tax') }}"> {{ $item->tax }}</a></td> --}}
                             <td>
                                 <span  onclick="deleteItem({{ $item->id }});" class="btn btn-danger btn-xs" data-title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
                             </td>
@@ -176,7 +176,7 @@
                     @if ($element['code'] =='subtotal')
                       <tr><td  class="td-title-normal">{!! $element['title'] !!}:</td><td style="text-align:right" class="data-{{ $element['code'] }}">{{ sc_currency_format($element['value']) }}</td></tr>
                     @endif
-                    @if ($element['code'] =='tax')
+                    @if ($element['code'] =='tax' && false)
                     <tr><td  class="td-title-normal">{!! $element['title'] !!}:</td><td style="text-align:right" class="data-{{ $element['code'] }}">{{ sc_currency_format($element['value']) }}</td></tr>
                     @endif
 
@@ -268,12 +268,12 @@
               <td><input type="text" disabled class="add_sku form-control"  value=""></td>
               <td><input onChange="update_total($(this));" type="number" min="0" step="0.01" class="add_price form-control" name="add_price[]" value="0"></td>
               <td><input onChange="update_total($(this));" type="number" min="0" class="add_qty form-control" name="add_qty[]" value="0"></td>
-              <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td>
-              <td><input  type="number" min="0" class="add_tax form-control" name="add_tax[]" step="0.01" value="0"></td>
+              <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td>              
               <td><button onClick="$(this).parent().parent().remove();" class="btn btn-danger btn-md btn-flat" data-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>
           <tr>
           </tr>';
+          // {{-- <td><input  type="number" min="0" class="add_tax form-control" name="add_tax[]" step="0.01" value="0"></td> --}}
         $htmlSelectProduct = str_replace("\n", '', $htmlSelectProduct);
         $htmlSelectProduct = str_replace("\t", '', $htmlSelectProduct);
         $htmlSelectProduct = str_replace("\r", '', $htmlSelectProduct);
@@ -345,7 +345,7 @@ function update_total(e){
             node.find('.add_qty').eq(0).val('');
             node.find('.add_price').eq(0).val('');
             node.find('.add_attr').html('');
-            node.find('.add_tax').html('');
+            // node.find('.add_tax').html('');
         }else{
             $.ajax({
                 url : '{{ route('admin_order.product_info') }}',
@@ -363,7 +363,7 @@ function update_total(e){
                 node.find('.add_price').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});
                 node.find('.add_total').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});
                 node.find('.add_attr').eq(0).html(returnedData.renderAttDetails);
-                node.find('.add_tax').eq(0).html(returnedData.tax);
+                // node.find('.add_tax').eq(0).html(returnedData.tax);
                 $('#loading').hide();
                 }
             });
@@ -477,7 +477,7 @@ function all_editable(){
                 $('.data-shipping').html(response.detail.shipping);
                 $('.data-received').html(response.detail.received);
                 $('.data-subtotal').html(response.detail.subtotal);
-                $('.data-tax').html(response.detail.tax);
+                // $('.data-tax').html(response.detail.tax);
                 $('.data-total').html(response.detail.total);
                 $('.data-shipping').html(response.detail.shipping);
                 $('.data-discount').html(response.detail.discount);
@@ -512,7 +512,7 @@ function all_editable(){
                   $('.data-shipping').html(response.detail.shipping);
                   $('.data-received').html(response.detail.received);
                   $('.data-subtotal').html(response.detail.subtotal);
-                  $('.data-tax').html(response.detail.tax);
+                  // $('.data-tax').html(response.detail.tax);
                   $('.data-total').html(response.detail.total);
                   $('.data-shipping').html(response.detail.shipping);
                   $('.data-discount').html(response.detail.discount);

@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group   {{ $errors->has('alias') ? ' has-error' : '' }}">
+                                <div class="hide form-group   {{ $errors->has('alias') ? ' has-error' : '' }}">
                                     <label for="alias" class="col-sm-2 col-form-label">{!! trans('supplier.alias') !!}</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">
@@ -166,7 +166,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group   {{ $errors->has('sort') ? ' has-error' : '' }}">
+                                <div class="hide form-group   {{ $errors->has('sort') ? ' has-error' : '' }}">
                                     <label for="sort" class="col-sm-2 col-form-label">{{ trans('supplier.sort') }}</label>
                                     <div class="col-sm-8">
                                         <div class="input-group">

@@ -37,7 +37,7 @@ class ShopSupplierController extends Controller
             'phone' => trans('supplier.phone'),
             'url' => trans('supplier.url'),
             'address' => trans('supplier.address'),
-            'sort' => trans('supplier.sort'),
+            // 'sort' => trans('supplier.sort'),
             'action' => trans('supplier.admin.action'),
         ];
 
@@ -76,7 +76,7 @@ class ShopSupplierController extends Controller
                 'phone' => $row['phone'],
                 'url' => $row['url'],
                 'address' => $row['address'],
-                'sort' => $row['sort'],
+                // 'sort' => $row['sort'],
                 'action' => '
                     <a href="' . route('admin_supplier.edit', ['id' => $row['id']]) . '"><span title="' . trans('supplier.admin.edit') . '" type="button" class="btn btn-flat btn-primary"><i class="fa fa-edit"></i></span></a>&nbsp;
 
@@ -160,7 +160,7 @@ class ShopSupplierController extends Controller
             'image' => 'required',
             'sort' => 'numeric|min:0',
             'name' => 'required|string|max:100',
-            'alias' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_supplier,alias|string|max:100',
+            'alias' => 'nullable|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_supplier,alias|string|max:100',
             'url' => 'url|nullable',
             'email' => 'email|nullable',
         ],[
@@ -227,7 +227,7 @@ class ShopSupplierController extends Controller
             'image' => 'required',
             'sort' => 'numeric|min:0',
             'name' => 'required|string|max:100',
-            'alias' => 'required|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_supplier,alias,' . $supplier->id . ',id|string|max:100',
+            'alias' => 'nullable|regex:/(^([0-9A-Za-z\-_]+)$)/|unique:'.SC_DB_PREFIX.'shop_supplier,alias,' . $supplier->id . ',id|string|max:100',
             'url' => 'url|nullable',
             'email' => 'email|nullable',
         ],[
