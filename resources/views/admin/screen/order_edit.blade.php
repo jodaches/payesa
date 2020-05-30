@@ -395,6 +395,9 @@ $('#add-item-button-save').click(function(event) {
             }else{
               alertJs('error', result.msg);
             }
+        }, complete: function () {
+            $('#add-item-button').prop('disabled', false);
+            $('#add-item-button-save').button('reset');
         }
     });
 });

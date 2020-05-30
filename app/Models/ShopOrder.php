@@ -416,12 +416,18 @@ class ShopOrder extends Model
     /**
      * Get Sum order total In month
      *
+     * @param from string format Y-m-d
+     * @param to string format Y-m-d
      * @return  [type]  [return description]
      */
-    public function getSumOrderTotalInMonth() {
-        return $this->selectRaw('DATE_FORMAT(created_at, "%m-%d") AS md,
-        SUM(total/exchange_rate) AS total_amount, count(id) AS total_order')
-        ->whereRaw('created_at >=  DATE_FORMAT(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), "%Y-%m-%d 00:00")')
+    public function getSumOrderTotalInMonth($from, $to) {
+        return $this->selectRaw('DATE_FORMAT(created_at, "%d/%m") AS md,
+        SUM(total/exchange_rate) AS total_amount,
+        SUM(total_cost/exchange_rate) AS total_cost,
+        (SUM(total/exchange_rate) - SUM(total_cost/exchange_rate)) AS profits,
+         count(id) AS total_order')
+        ->whereRaw('created_at >=  DATE_FORMAT("'.$from.'", "%Y-%m-%d 00:00")')
+        ->whereRaw('created_at <=  DATE_FORMAT("'.$to.'", "%Y-%m-%d 00:00")')
         ->groupBy('md')->get();
     }
 

@@ -214,15 +214,17 @@ class ShopOrderTotal extends Model
         try {
             $order = ShopOrder::find($order_id);
             $details = $order->details;
-            $tax = $subTotal = 0;
+            $tax = $subTotal = $totalCost = 0;
             if($details->count()) {
                 foreach ($details as $detail) {
                     $tax +=$detail->tax;
-                    $subTotal +=$detail->total_price;
+                    $subTotal += $detail->total_price;
+                    $totalCost += $detail->total_cost;
                 }
             }
             $order->subtotal = $subTotal;
             $order->tax = $tax;
+            $order->total_cost = $totalCost;
             $total = $subTotal + $tax + $order->discount + $order->shipping;
             $balance = $total + $order->received;
             $payment_status = 0;

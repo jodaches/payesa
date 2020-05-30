@@ -77,6 +77,7 @@ class ShopOrderController extends Controller
             'shipping' => trans('order.admin.shipping'),
             'discount' => trans('order.admin.discount'),
             'total' => trans('order.admin.total'),
+            'total' => trans('order.admin.total'),
             // 'payment_method' => trans('order.admin.payment_method_short'),
             // 'currency' => trans('order.admin.currency'),
             'status' => trans('order.admin.status'),
@@ -491,7 +492,9 @@ class ShopOrderController extends Controller
                     'name' => $product->name,
                     'qty' => $add_qty[$key],
                     'price' => $add_price[$key],
+                    'cost' => $product->cost,
                     'total_price' => $add_price[$key] * $add_qty[$key],
+                    'total_cost' => $product->cost * $add_qty[$key],
                     'sku' => $product->sku,
                     'tax' => $add_tax[$key] ?? 0,
                     'attribute' => $pAttr,
@@ -541,7 +544,7 @@ class ShopOrderController extends Controller
 
             //Update stock
             if ($field == 'qty') {
-                if(ShopCart::validateStock($item->product_id, $value)){
+                if(ShopCart::validateStock($item->product_id, $value, $fieldOrg)){
                     $checkQty = $value - $fieldOrg;
                     //Update stock, sold
                     ShopProduct::updateStock($item->product_id, $checkQty);
@@ -550,10 +553,12 @@ class ShopOrderController extends Controller
                     return $arrayReturn;             
                 }
             }
-            
+            $product = ShopProduct::find($item->product_id);
             //UPDATE ORDER ITEM
+            $item->cost = $product->cost;
             $item->{$field} = $value;
             $item->total_price = $value * (($field == 'qty') ? $item->price : $item->qty);
+            $item->total_cost = $product->cost * (($field == 'qty') ? $item->price : $item->qty);
             $item->save();
             $item = $item->fresh();
             $order = ShopOrder::find($orderID);            

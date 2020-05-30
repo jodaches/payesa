@@ -64,7 +64,7 @@
 
 
         <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="col-md-3 col-sm-6 col-xs-12 hide">
           <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa-map-signs"></i></span>
 
@@ -91,6 +91,17 @@
 
   <div class="col-md-12">
 
+	<div class="box pad">
+		<div class="d-flex text-right">
+			<label for="from_date">Desde: &nbsp;</label>
+			<input type="text" id="date_from" name="expires_at" value="{{ \Carbon\Carbon::now()->firstOfMonth()->format('d/m/Y') }}" 
+				class="inline form-control date_time" style="width: 100px;" placeholder="" />
+			&nbsp;&nbsp;
+			<label for="from_date">Hasta: &nbsp;</label>
+			<input type="text" id="date_to" name="expires_at" value="{{ \Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}" 
+				class="inline form-control date_time" style="width: 100px;" placeholder="" />
+		</div>
+	</div>
     <div class="box box-primary">
       <div class="box-header with-border">
         <h3 class="box-title">{{ trans('admin.order_month') }}</h3>
@@ -103,7 +114,7 @@
       </div>
 
       <div class="box-body table-responsive no-padding box-primary">
-        <div class="box">
+        <div class="box">			
           <div id="chart-days" style="width:100%; height:auto;"></div>
         </div>
       </div>
@@ -111,7 +122,7 @@
   </div>
 
 
-  <div class="col-md-12">
+  <div class="col-md-12 hide">
     <div class="box box-primary">
       <div class="box-header with-border">
         <h3 class="box-title">{{ trans('admin.order_year') }}</h3>
@@ -255,15 +266,50 @@
   <script src="{{ asset('admin/plugin/chartjs/highcharts-3d.js') }}"></script>
   <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', function () {
+	let dateFormat = "DD/MM/YYYY"
+    
+    //Date picker
+    $('.date_time').datepicker({
+		autoclose: true,
+		format: "dd/mm/yyyy",
+		isRTL: false,
+		language: 'es'
+    })
+
+	$('.date_time').on("changeDate", function (ev) {
+		let from = moment($("#date_from").val(), dateFormat)
+		let to = moment($("#date_to").val(), dateFormat)
+		if(to.isSameOrAfter(from)){
+			updateMainChart(from, to);
+		}    		
+	})
+
+	function updateMainChart(from, to) {
+		$.ajax({
+			url: "{{ route('admin.mainChartData') }}",
+			data:{
+				from: from.format('YYYY-MM-DD'),
+				to: to.format('YYYY-MM-DD')
+			},
+			success: function (data) {							
+				myChart.axes[0].setCategories(Object.keys(data.orderInMonth))
+				myChart.series[0].setData(Object.values(data.orderInMonth));
+				myChart.series[1].setData(Object.values(data.amountInMonth));
+				myChart.series[2].setData(Object.values(data.costInMonth));
+				myChart.series[3].setData(Object.values(data.profitsInMonth));
+			}
+		})
+	}
+
       var myChart = Highcharts.chart('chart-days', {
           credits: {
               enabled: false
           },
           title: {
-              text: '{{ trans('chart.static_30_day') }}'
+              text: '{{ trans('chart.profits') }}'
           },
           xAxis: {
-              categories: {!! json_encode(array_keys($orderInMonth)) !!},
+              categories: [], //{!! json_encode(array_keys($orderInMonth)) !!},
               crosshair: false
 
           },
@@ -305,8 +351,9 @@
           series: [
           {
               type: 'column',
-              name: '{{ trans('chart.order') }}',
-              data: {!! json_encode(array_values($orderInMonth)) !!},
+			  name: '{{ trans('chart.order') }}',
+			  color: '#746ef5',
+              data:  [],//{!! json_encode(array_values($orderInMonth)) !!},
               dataLabels: {
                   enabled: true,
                   format: '{point.y:.0f}'
@@ -314,10 +361,10 @@
           },
           {
               type: 'spline',
-              name: '{{ trans('chart.amount') }}',
-              color: '#32ca0c',
+              name: '{{ trans('chart.total_amount') }}',
+              color: '#00c0ef',
               yAxis: 1,
-              data: {!! json_encode(array_values($amountInMonth)) !!},
+              data: [],//{!! json_encode(array_values($amountInMonth)) !!},
               borderWidth: 0,
               dataLabels: {
                   enabled: true,
@@ -328,8 +375,25 @@
                   y: -6
               }
           },
+          {
+            yAxis: 1,
+            type : 'spline',
+            color: '#d05135',
+            name : '{{ trans('chart.cost') }}',
+            data: []//{!! json_encode(array_values($costInMonth)) !!}
+          },
+          {
+            yAxis: 1,
+            type : 'spline',
+            color: '#32ca0c',
+            name : '{{ trans('chart.profit') }}',
+            data: []//{!! json_encode(array_values($profitsInMonth)) !!}
+          }
         ]
-      });
+	  });
+	  
+	  //initial load of main chart
+	  $('.date_time').trigger('changeDate')
   });
 
 

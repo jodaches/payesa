@@ -66,7 +66,7 @@ return [
     |
      */
 
-    'timezone' => 'Asia/ho_chi_minh',
+    'timezone' => 'America/Guatemala',
 
     /*
     |--------------------------------------------------------------------------

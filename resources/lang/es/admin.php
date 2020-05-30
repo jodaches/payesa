@@ -140,7 +140,7 @@ return [
       'search_order'                      => 'Buscar order id, email, phone or name',
       'only_numeric'                      => 'Please input numeric!',
       'order_year'                        => 'In 12 months',
-      'order_month'                       => 'In 30 days',
+      'order_month'                       => 'Costo y ganancias',
       'dashboard'                         => 'Dashboard',
       'total_product'                     => 'Total de productos',
       'total_order'                       => 'Total de ordenes',

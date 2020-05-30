@@ -564,9 +564,12 @@ class ShopCart extends GeneralController
 
     }
 
-    public static function validateStock($product_id, $qty){
+    /**
+     * use old qty for update, because you already had that inv before
+     */
+    public static function validateStock($product_id, $qty, $oldqty = 0){
         $product = (new ShopProduct)->getDetail($product_id);
-        return $product->stock >= $qty || sc_config('product_buy_out_of_stock');
+        return ($product->stock + $oldqty) >= $qty || sc_config('product_buy_out_of_stock');
     }
 
     /**

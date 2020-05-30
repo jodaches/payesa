@@ -54,7 +54,7 @@ class HomeController extends Controller
 
 
         //Order in 30 days
-        $totalsInMonth = (new ShopOrder)->getSumOrderTotalInMonth()->keyBy('md')->toArray();
+        $totalsInMonth = (new ShopOrder)->getSumOrderTotalInMonth("2020-05-01","2020-05-31")->keyBy('md')->toArray();
         $rangDays = new \DatePeriod(
             new \DateTime('-1 month'),
             new \DateInterval('P1D'),
@@ -66,9 +66,13 @@ class HomeController extends Controller
             $date = $day->format('m-d');
             $orderInMonth[$date] = $totalsInMonth[$date]['total_order'] ?? '';
             $amountInMonth[$date] = ($totalsInMonth[$date]['total_amount'] ?? 0);
+            $costInMonth[$date] = ($totalsInMonth[$date]['total_cost'] ?? 0);
+            $profitsInMonth[$date] = ($totalsInMonth[$date]['profits'] ?? 0);
         }
         $data['orderInMonth'] = $orderInMonth;
         $data['amountInMonth'] = $amountInMonth;
+        $data['costInMonth'] = $costInMonth;
+        $data['profitsInMonth'] = $profitsInMonth;
 
         //End order in 30 days
         
@@ -84,6 +88,34 @@ class HomeController extends Controller
         //End order in 12 months
 
         return view('admin.home', $data);
+    }
+
+    public function mainChartData(Request $request){
+        $from = $request->from;
+        $to = $request->to;
+        $data = [];
+        //Order in 30 days
+        $totalsInMonth = (new ShopOrder)->getSumOrderTotalInMonth($from, $to)->keyBy('md')->toArray();
+        $rangDays = new \DatePeriod(
+            new \DateTime($from),
+            new \DateInterval('P1D'),
+            new \DateTime($to)
+        );
+        $orderInMonth  = [];
+        $amountInMonth  = [];   
+        foreach ($rangDays as $i => $day) {
+            $date = $day->format('d/m');
+            $orderInMonth[$date] = $totalsInMonth[$date]['total_order'] ?? '';
+            $amountInMonth[$date] = ($totalsInMonth[$date]['total_amount'] ?? 0);
+            $costInMonth[$date] = ($totalsInMonth[$date]['total_cost'] ?? 0);
+            $profitsInMonth[$date] = ($totalsInMonth[$date]['profits'] ?? 0);
+        }
+        $data['orderInMonth'] = $orderInMonth;
+        $data['amountInMonth'] = $amountInMonth;
+        $data['costInMonth'] = $costInMonth;
+        $data['profitsInMonth'] = $profitsInMonth;
+
+        return response()->json($data);
     }
 
     public function deny()

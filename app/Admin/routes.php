@@ -13,6 +13,7 @@ Route::group(
         require_once $filename;
     }
     $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/mainChartData', 'HomeController@mainChartData')->name('admin.mainChartData');
     $router->get('deny', 'HomeController@deny')->name('admin.deny');
 
     //Language
