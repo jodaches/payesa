@@ -77,7 +77,7 @@ class ShopOrderController extends Controller
             'shipping' => trans('order.admin.shipping'),
             'discount' => trans('order.admin.discount'),
             'total' => trans('order.admin.total'),
-            'total' => trans('order.admin.total'),
+            // 'total' => trans('order.admin.total'),
             // 'payment_method' => trans('order.admin.payment_method_short'),
             // 'currency' => trans('order.admin.currency'),
             'status' => trans('order.admin.status'),

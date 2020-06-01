@@ -81,7 +81,7 @@ return [
         'shipping'             => 'Envío',
         'discount'             => 'Descuento',
         'total'                => 'Total',
-        'total'                => 'Costo total',
+        'total_cost'                => 'Costo total',
         'received'             => 'Recibido',
         'payment_method'       => 'Método de pago',
         'payment_method_short' => 'M. Pago',
