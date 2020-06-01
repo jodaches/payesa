@@ -44,9 +44,6 @@ class ShopOrderDetail extends Model
                     throw new \Exception("No hay inventario suficiente para el producto " . $item['name'], 1);
                     
                 }
-
-                //Update stock, sold
-                ShopProduct::updateStock($item['product_id'], $item['qty']);
             }
         }
 
