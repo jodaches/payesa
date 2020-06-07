@@ -352,6 +352,11 @@ class ShopProductController extends Controller
         $data['alias'] = sc_word_format_url($data['alias']);
         $data['alias'] = sc_word_limit($data['alias'], 100);
 
+        $double = ShopProduct::where('alias', $data['alias'])->first();
+        if($double){
+            $data['alias'] .=  '_' . time();
+        }
+
         switch ($data['kind']) {
             case SC_PRODUCT_SINGLE: // product single
                 $arrValidation = [
