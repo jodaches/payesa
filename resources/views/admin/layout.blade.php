@@ -19,6 +19,8 @@
   <link rel="stylesheet" href="{{ asset('admin/AdminLTE/bower_components/morris.js/morris.css')}}">
   <!-- jvectormap -->
   <link rel="stylesheet" href="{{ asset('admin/AdminLTE/bower_components/jvectormap/jquery-jvectormap.css')}}">
+  <!-- datatables -->
+  <link rel="stylesheet" href="{{ 'https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css'}}">  
   <!-- Date Picker -->
   <link rel="stylesheet" href="{{ asset('admin/AdminLTE/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
   <!-- Daterange picker -->
@@ -99,6 +101,7 @@
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
+
 <!-- Bootstrap 3.3.7 -->
 <script src="{{ asset('admin/AdminLTE/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- iCheck -->
@@ -112,6 +115,7 @@
 <!-- jvectormap -->
 <script src="{{ asset('admin/AdminLTE/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
 <script src="{{ asset('admin/AdminLTE/plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+
 <!-- jQuery Knob Chart -->
 <script src="{{ asset('admin/AdminLTE/bower_components/jquery-knob/dist/jquery.knob.min.js')}}"></script>
 <!-- daterangepicker -->
@@ -136,6 +140,10 @@
 <script src="{{ asset('admin/AdminLTE/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
 {{-- switch --}}
 <script src="{{ asset('admin/plugin/bootstrap-switch.min.js')}}"></script>
+
+<!-- datatables -->
+<script src="{{ 'https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js'}}"></script>
+
 @endif
 
 @stack('scripts')
