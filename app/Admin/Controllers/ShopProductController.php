@@ -84,7 +84,9 @@ class ShopProductController extends Controller
         if($allowProfits){
             $listTh['profits'] = trans('product.profits');
         }
-        $listTh['price_promotion'] = trans('product.price_promotion');
+        if(sc_config('product_promotion')){
+            $listTh['price_promotion'] = trans('product.price_promotion');
+        }
         if(sc_config('product_type')){
             $listTh['type'] = trans('product.type');
         }
@@ -184,7 +186,9 @@ class ShopProductController extends Controller
             if($allowProfits){
                 $dataMap['profits'] = $row['price'] - $row['cost'] ;
             }
-            $dataMap['price_promotion'] = $row['price_promotion'];
+            if(sc_config('product_promotion')){
+                $dataMap['price_promotion'] = $row['price_promotion'];
+            }
             if(sc_config('product_type')){
                 $dataMap['type'] = $type;
             }
