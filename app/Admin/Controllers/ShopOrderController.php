@@ -53,6 +53,7 @@ class ShopOrderController extends Controller
      */
     public function index()
     {
+        $allowProfits = Admin::user()->inRoles(ShopProductController::PROFITS_ROLES);
 
         $data = [
             'title' => trans('order.admin.list'),
@@ -79,11 +80,18 @@ class ShopOrderController extends Controller
             'total' => trans('order.admin.total'),
             // 'total' => trans('order.admin.total'),
             // 'payment_method' => trans('order.admin.payment_method_short'),
-            // 'currency' => trans('order.admin.currency'),
-            'status' => trans('order.admin.status'),
-            'created_at' => trans('order.admin.created_at'),
-            'action' => trans('order.admin.action'),
+            // 'currency' => trans('order.admin.currency'),           
         ];
+
+        if(sc_config('product_cost') && $allowProfits){
+            $listTh['cost'] = trans('order.admin.total_cost');        
+            $listTh['profits'] = trans('order.admin.profits');
+        }
+
+        $listTh['status' ] = trans('order.admin.status');
+        $listTh['created_at' ] = trans('order.admin.created_at');
+        $listTh['action' ] = trans('order.admin.action');
+
         $sort_order = request('sort_order') ?? 'id_desc';
         $keyword = request('keyword') ?? '';
         $order_status = request('order_status') ?? '';
@@ -118,7 +126,7 @@ class ShopOrderController extends Controller
         });
         $dataTr = [];
         foreach ($dataTmp as $key => $row) {
-            $dataTr[] = [
+            $dataMap = [
                 'id' => $row['id'],
                 'email' => $row['email'] ?? 'N/A',
                 'subtotal' => sc_currency_render_symbol($row['subtotal'] ?? 0, $row['currency']),
@@ -126,15 +134,20 @@ class ShopOrderController extends Controller
                 'discount' => sc_currency_render_symbol($row['discount'] ?? 0, $row['currency']),
                 'total' => sc_currency_render_symbol($row['total'] ?? 0, $row['currency']),
                 // 'payment_method' => $row['payment_method'],
-                // 'currency' => $row['currency'] . '/' . $row['exchange_rate'],
-                'status' => $styleStatus[$row['status']],
-                'created_at' => $row['created_at'],
-                'action' => '
+                // 'currency' => $row['currency'] . '/' . $row['exchange_rate'],                
+            ];
+            if(sc_config('product_cost') && $allowProfits){
+                $dataMap['cost'] = sc_currency_render_symbol($row['total_cost'] ?? 0, $row['currency']);
+                $dataMap['profits'] = sc_currency_render_symbol( ($row['total'] ?? 0) - ($row['total_cost'] ?? 0) , $row['currency']);
+            }
+
+            $dataMap['status' ]= $styleStatus[$row['status']];
+            $dataMap['created_at' ]= $row['created_at'];
+            $dataMap['action' ]= '
                                 <a href="' . route('admin_order.detail', ['id' => $row['id']]) . '"><span title="' . trans('order.admin.edit') . '" type="button" class="btn btn-flat btn-primary"><i class="fa fa-edit"></i></span></a>&nbsp;
 
-                                <span onclick="deleteItem(' . $row['id'] . ');"  title="' . trans('admin.delete') . '" class="btn btn-flat btn-danger"><i class="fa fa-trash"></i></span>'
-                ,
-            ];
+                                <span onclick="deleteItem(' . $row['id'] . ');"  title="' . trans('admin.delete') . '" class="btn btn-flat btn-danger"><i class="fa fa-trash"></i></span>';
+            $dataTr[] = $dataMap;
         }
 
         $data['listTh'] = $listTh;
@@ -558,7 +571,7 @@ class ShopOrderController extends Controller
             $item->cost = $product->cost;
             $item->{$field} = $value;
             $item->total_price = $value * (($field == 'qty') ? $item->price : $item->qty);
-            $item->total_cost = $product->cost * (($field == 'qty') ? $item->price : $item->qty);
+            $item->total_cost = $item->cost * $item->qty;
             $item->save();
             $item = $item->fresh();
             $order = ShopOrder::find($orderID);            
@@ -592,12 +605,16 @@ class ShopOrderController extends Controller
             $blance = '<tr ' . $style . ' class="data-balance"><td>' . trans('order.balance') . ':</td><td align="right">' . sc_currency_format($orderUpdated->balance) . '</td></tr>';
             $arrayReturn = ['error' => 0, 'detail' => [
                 'total' => sc_currency_format($orderUpdated->total),
+                'total_cost' => sc_currency_format($orderUpdated->total_cost),
+                'profits' => sc_currency_format($orderUpdated->total - $orderUpdated->total_cost),
                 'subtotal' => sc_currency_format($orderUpdated->subtotal),
                 'tax' => sc_currency_format($orderUpdated->tax),
                 'shipping' => sc_currency_format($orderUpdated->shipping),
                 'discount' => sc_currency_format($orderUpdated->discount),
                 'received' => sc_currency_format($orderUpdated->received),
                 'item_total_price' => sc_currency_render_symbol($item->total_price, $item->currency),
+                'item_total_cost' => sc_currency_render_symbol($item->total_cost, $item->currency),
+                'item_total_profits' => sc_currency_render_symbol($item->total_price - $item->total_cost , $item->currency),
                 'item_id' => $id,
                 'balance' => $blance,
             ],'msg' => trans('order.admin.update_success')

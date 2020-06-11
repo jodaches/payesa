@@ -23,7 +23,7 @@ use DB;
 
 class ShopProductController extends Controller
 {
-    const PROFITS_ROLES = ['gerente','administrator'];
+    public const PROFITS_ROLES = ['gerente','administrator'];
     public $languages, $types, $kinds, $virtuals, $attributeGroup;
 
     public function __construct()

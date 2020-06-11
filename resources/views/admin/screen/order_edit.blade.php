@@ -1,5 +1,9 @@
 @extends('admin.layout')
 
+@php
+  $allowProfits = App\Admin\Admin::user()->inRoles(App\Admin\Controllers\ShopProductController::PROFITS_ROLES);    
+@endphp
+
 @section('main')
  <div class="row">
     <div class="col-md-12">
@@ -122,6 +126,10 @@
                     <th class="product_price">{{ trans('product.price') }}</th>
                     <th class="product_qty">{{ trans('product.quantity') }}</th>
                     <th class="product_total">{{ trans('product.total_price') }}</th>
+                    @if($allowProfits)
+                      <th class="product_cost">{{ trans('product.cost') }}</th>
+                      <th class="product_profits">{{ trans('product.profits') }}</th>
+                    @endif
                     {{-- <th class="product_tax">{{ trans('product.tax') }}</th> --}}
                     <th>{{ trans('admin.action') }}</th>
                   </tr>
@@ -145,6 +153,10 @@
                             <td class="product_price"><a href="#" class="edit-item-detail" data-value="{{ $item->price }}" data-name="price" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('product.price') }}">{{ $item->price }}</a></td>
                             <td class="product_qty">x <a href="#" class="edit-item-detail" data-value="{{ $item->qty }}" data-name="qty" data-type="number" min=0 data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.qty') }}"> {{ $item->qty }}</a></td>
                             <td class="product_total item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_price,$order->currency)}}</td>
+                            @if($allowProfits)                              
+                              <td class="product_cost item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_cost,$order->currency)}}</td>
+                              <td class="product_profits item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_price - $item->total_cost,$order->currency)}}</td>
+                            @endif
                             {{-- <td class="product_tax"><a href="#" class="edit-item-detail" data-value="{{ $item->tax }}" data-name="tax" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.tax') }}"> {{ $item->tax }}</a></td> --}}
                             <td>
                                 <span  onclick="deleteItem({{ $item->id }});" class="btn btn-danger btn-xs" data-title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></span>
@@ -198,6 +210,16 @@
                   @endforeach
 
                     <tr  {!! $style !!}  class="data-balance"><td>{{ trans('order.balance') }}:</td><td style="text-align:right">{{($order->balance === NULL)?sc_currency_format($order->total):sc_currency_format($order->balance) }}</td></tr>
+                    @if($allowProfits)
+                    <tr >
+                      <td>{{ trans('order.admin.total_cost') }}:</td>
+                      <td class="data-total_cost" style="text-align:right">{{  sc_currency_format($order->total_cost) }}</td>                      
+                    </tr>
+                    <tr >
+                      <td>{{ trans('order.admin.profits') }}:</td>
+                      <td class="data-profits" style="text-align:right">{{  sc_currency_format($order->total - $order->total_cost) }}</td>                      
+                    </tr>
+                    @endif
               </table>
             </div>
 
@@ -261,6 +283,10 @@
                     $htmlSelectProduct .='<option  value="'.$pId.'" >'.$productName.'</option>';
                    }
                 }
+  $profitsCols = '<td><input type="number" disabled class="add_cost form-control" step="0.01" value="0"></td>              
+              <td><input type="number" disabled class="add_profits form-control" step="0.01" value="0"></td>
+              <td class="hidden"><input type="number" disabled class="add_individual_cost hidden" step="0.01" value="0"></td>
+              ';
   $htmlSelectProduct .='
               </select>
               <span class="add_attr"></span>
@@ -268,8 +294,9 @@
               <td><input type="text" disabled class="add_sku form-control"  value=""></td>
               <td><input onChange="update_total($(this));" type="number" min="0" step="0.01" class="add_price form-control" name="add_price[]" value="0"></td>
               <td><input onChange="update_total($(this));" type="number" min="0" class="add_qty form-control" name="add_qty[]" value="0"></td>
-              <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td>              
-              <td><button onClick="$(this).parent().parent().remove();" class="btn btn-danger btn-md btn-flat" data-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+              <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td> '
+              . ($allowProfits ? $profitsCols : '')  . 
+              '<td><button onClick="$(this).parent().parent().remove();" class="btn btn-danger btn-md btn-flat" data-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>
           <tr>
           </tr>';
@@ -302,7 +329,7 @@
   width: 80px;
   text-align: right;
 }
-.product_price,.product_total{
+.product_price,.product_total, .product_cost, .product_profits{
   width: 120px;
   text-align: right;
 }
@@ -332,7 +359,10 @@ function update_total(e){
     node = e.closest('tr');
     var qty = node.find('.add_qty').eq(0).val();
     var price = node.find('.add_price').eq(0).val();
+    var individualCost = node.find('.add_individual_cost').eq(0).val();
     node.find('.add_total').eq(0).val(qty*price);
+    node.find('.add_cost').eq(0).val(qty*individualCost);
+    node.find('.add_profits').eq(0).val(qty*(price -  individualCost));
 }
 
 
@@ -362,6 +392,9 @@ function update_total(e){
                 node.find('.add_qty').eq(0).val(1);
                 node.find('.add_price').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});
                 node.find('.add_total').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});
+                node.find('.add_individual_cost').eq(0).val(returnedData.cost * {!! ($order->exchange_rate)??1 !!});
+                node.find('.add_cost').eq(0).val(returnedData.cost * {!! ($order->exchange_rate)??1 !!});
+                node.find('.add_profits').eq(0).val((returnedData.price_final - returnedData.cost) * {!! ($order->exchange_rate)??1 !!});
                 node.find('.add_attr').eq(0).html(returnedData.renderAttDetails);
                 // node.find('.add_tax').eq(0).html(returnedData.tax);
                 $('#loading').hide();
@@ -484,7 +517,13 @@ function all_editable(){
                 $('.data-total').html(response.detail.total);
                 $('.data-shipping').html(response.detail.shipping);
                 $('.data-discount').html(response.detail.discount);
-                $('.item_id_'+response.detail.item_id).html(response.detail.item_total_price);
+                $('.item_id_'+response.detail.item_id +".product_total").html(response.detail.item_total_price);
+                $('.item_id_'+response.detail.item_id +".product_cost").html(response.detail.item_total_cost);
+                $('.item_id_'+response.detail.item_id +".product_profits").html(response.detail.item_total_profits);
+
+                $('.data-total_cost').html(response.detail.total_cost);
+                $('.data-profits').html(response.detail.profits);
+
                 var objblance = $('.data-balance').eq(0);
                 objblance.before(response.detail.balance);
                 objblance.remove();
@@ -519,6 +558,9 @@ function all_editable(){
                   $('.data-total').html(response.detail.total);
                   $('.data-shipping').html(response.detail.shipping);
                   $('.data-discount').html(response.detail.discount);
+                  
+                  $('.data-total_cost').html(response.detail.total_cost);
+                  $('.data-profits').html(response.detail.profits);
                   var objblance = $('.data-balance').eq(0);
                   objblance.before(response.detail.balance);
                   objblance.remove();
