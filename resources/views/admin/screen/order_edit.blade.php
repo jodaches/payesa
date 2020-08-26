@@ -422,15 +422,16 @@ $('#add-item-button-save').click(function(event) {
             $('#loading').show();
         },
         success: function(result){
-          $('#loading').hide();
             if(parseInt(result.error) ==0){
                 location.reload();
             }else{
               alertJs('error', result.msg);
+              $('#add-item-button').prop('disabled', false);
+              $('#add-item-button-save').button('reset');
+              $('#loading').hide();
             }
         }, complete: function () {
-            $('#add-item-button').prop('disabled', false);
-            $('#add-item-button-save').button('reset');
+            
         }
     });
 });
