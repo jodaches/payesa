@@ -425,10 +425,10 @@ $('#add-item-button-save').click(function(event) {
             if(parseInt(result.error) ==0){
                 location.reload();
             }else{
-              alertJs('error', result.msg);
               $('#add-item-button').prop('disabled', false);
               $('#add-item-button-save').button('reset');
               $('#loading').hide();
+              alertJs('error', result.msg);
             }
         }, complete: function () {
             
