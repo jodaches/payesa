@@ -296,7 +296,7 @@
               <td><input onChange="update_total($(this));" type="number" min="0" class="add_qty form-control" name="add_qty[]" value="0"></td>
               <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td> '
               . ($allowProfits ? $profitsCols : '')  . 
-              '<td><button onClick="$(this).parent().parent().remove();" class="btn btn-danger btn-md btn-flat" data-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button></td>
+              '<td><button onClick="cancelNew(this)" class="btn btn-danger btn-md btn-flat" data-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></button></td>
             </tr>
           <tr>
           </tr>';
@@ -409,6 +409,11 @@ $('#add-item-button').click(function() {
   $('.select2').select2();
   $('#add-item-button-save').show();
 });
+
+function cancelNew(btn) {
+  $(btn).parent().parent().remove();
+  $('#add-item-button-save').hide();
+}
 
 $('#add-item-button-save').click(function(event) {
     $('#add-item-button').prop('disabled', true);
