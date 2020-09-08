@@ -412,7 +412,9 @@ $('#add-item-button').click(function() {
 
 function cancelNew(btn) {
   $(btn).parent().parent().remove();
-  $('#add-item-button-save').hide();
+  if($("select[name='add_id[]']").length == 0) {
+    $('#add-item-button-save').hide();
+  }
 }
 
 $('#add-item-button-save').click(function(event) {

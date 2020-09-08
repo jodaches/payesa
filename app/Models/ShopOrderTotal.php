@@ -211,62 +211,58 @@ class ShopOrderTotal extends Model
      */
     public static function updateSubTotal($order_id)
     {
-        try {
-            $order = ShopOrder::find($order_id);
-            $details = $order->details;
-            $tax = $subTotal = $totalCost = 0;
-            if($details->count()) {
-                foreach ($details as $detail) {
-                    $tax +=$detail->tax;
-                    $subTotal += $detail->total_price;
-                    $totalCost += $detail->total_cost;
-                }
+        $order = ShopOrder::find($order_id);
+        $details = $order->details;
+        $tax = $subTotal = $totalCost = 0;
+        if($details->count()) {
+            foreach ($details as $detail) {
+                $tax +=$detail->tax;
+                $subTotal += $detail->total_price;
+                $totalCost += $detail->total_cost;
             }
-            $order->subtotal = $subTotal;
-            $order->tax = $tax;
-            $order->total_cost = $totalCost;
-            $total = $subTotal + $tax + $order->discount + $order->shipping;
-            $balance = $total + $order->received;
-            $payment_status = 0;
-            if ($balance == $total) {
-                $payment_status = self::NOT_YET_PAY; //Not pay
-            } elseif ($balance < 0) {
-                $payment_status = self::NEED_REFUND; //Need refund
-            } elseif ($balance == 0) {
-                $payment_status = self::PAID; //Paid
-            } else {
-                $payment_status = self::PART_PAY; //Part pay
-            }
-            $order->payment_status = $payment_status;
-            $order->total = $total;
-            $order->balance = $balance;
-            $order->save();
-
-            //Update total
-            $updateTotal = self::where('order_id', $order_id)
-                ->where('code', 'total')
-                ->first();
-            $updateTotal->value = $total;
-            $updateTotal->save();
-            
-            //Update Subtotal
-            $updateSubTotal = self::where('order_id', $order_id)
-                ->where('code', 'subtotal')
-                ->first();
-            $updateSubTotal->value = $subTotal;
-            $updateSubTotal->save();
-
-            //Update tax
-            $updateSubTotal = self::where('order_id', $order_id)
-            ->where('code', 'tax')
-            ->first();
-            $updateSubTotal->value = $tax;
-            $updateSubTotal->save();
-
-            return 1;
-        } catch (\Exception $e) {
-            return $e->getMessage();
         }
+        $order->subtotal = $subTotal;
+        $order->tax = $tax;
+        $order->total_cost = $totalCost;
+        $total = $subTotal + $tax + $order->discount + $order->shipping;
+        $balance = $total + $order->received;
+        $payment_status = 0;
+        if ($balance == $total) {
+            $payment_status = self::NOT_YET_PAY; //Not pay
+        } elseif ($balance < 0) {
+            $payment_status = self::NEED_REFUND; //Need refund
+        } elseif ($balance == 0) {
+            $payment_status = self::PAID; //Paid
+        } else {
+            $payment_status = self::PART_PAY; //Part pay
+        }
+        $order->payment_status = $payment_status;
+        $order->total = $total;
+        $order->balance = $balance;
+        $order->save();
+
+        //Update total
+        $updateTotal = self::where('order_id', $order_id)
+            ->where('code', 'total')
+            ->first();
+        $updateTotal->value = $total;
+        $updateTotal->save();
+        
+        //Update Subtotal
+        $updateSubTotal = self::where('order_id', $order_id)
+            ->where('code', 'subtotal')
+            ->first();
+        $updateSubTotal->value = $subTotal;
+        $updateSubTotal->save();
+
+        //Update tax
+        $updateSubTotal = self::where('order_id', $order_id)
+        ->where('code', 'tax')
+        ->first();
+        $updateSubTotal->value = $tax;
+        $updateSubTotal->save();
+
+        return 1;
     }
 
     /**
