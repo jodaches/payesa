@@ -368,6 +368,7 @@ class InsertDatabaseShop extends Migration
             ['order_id' => '1', 'code' => 'discount', 'title' => 'Discount', 'value' => '0', 'sort' => '20'],
             ['order_id' => '1', 'code' => 'total', 'title' => 'Total', 'value' => '7000', 'sort' => '100'],
             ['order_id' => '1', 'code' => 'received', 'title' => 'Received', 'value' => '0', 'sort' => '200'],
+            ['order_id' => '1', 'code' => 'tax', 'title' => 'Tax', 'value' => '0', 'sort' => '200'],
         ]);
 
         DB::table(SC_DB_PREFIX.'shop_country')->insert([

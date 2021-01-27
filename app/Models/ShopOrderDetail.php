@@ -42,11 +42,11 @@ class ShopOrderDetail extends Model
                 }else{
                     DB::rollback();
                     throw new \Exception("No hay inventario suficiente para el producto " . $item['name'], 1);
-                    
+                    return;
                 }
             }
         }
-
         DB::commit();
+        return;
     }
 }

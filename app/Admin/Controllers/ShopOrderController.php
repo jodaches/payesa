@@ -533,6 +533,7 @@ class ShopOrderController extends Controller
                 //end update total price
                 return response()->json(['error' => 0, 'msg' => trans('order.admin.update_success')]);
             } catch (\Exception $e) {
+                // dd($e);
                 return response()->json(['error' => 1, 'msg' => 'Error: ' . $e->getMessage()]);
             }
 
@@ -635,7 +636,7 @@ class ShopOrderController extends Controller
         try {
             $data = request()->all();
             $pId = $data['pId'] ?? 0;
-            $itemDetail = (new ShopOrderDetail)->where('id', $pId)->first();
+            $itemDetail = ShopOrderDetail::where('id', $pId)->first();
             $order_id = $itemDetail->order_id;
             $product_id = $itemDetail->product_id;
             $qty = $itemDetail->qty;
@@ -656,6 +657,7 @@ class ShopOrderController extends Controller
             (new ShopOrder)->addOrderHistory($dataHistory);
             return response()->json(['error' => 0, 'msg' => trans('order.admin.update_success')]);
         } catch (\Exception $e) {
+            // dd($e);
             return response()->json(['error' => 1, 'msg' => 'Error: ' . $e->getMessage()]);
 
         }

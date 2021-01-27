@@ -81,6 +81,8 @@ return [
         'email'                => 'Email',
         'subtotal'             => 'Subtotal',
         'shipping'             => 'Shipping',
+        'total_cost'            => 'Total Cost',
+        'profits'            => 'Profits',
         'discount'             => 'Dicount',
         'total'                => 'Total',
         'received'             => 'Received',
