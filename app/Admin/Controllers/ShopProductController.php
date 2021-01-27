@@ -81,6 +81,8 @@ class ShopProductController extends Controller
         if(sc_config('product_price')){
             $listTh['price'] = trans('product.price');
         }
+        $listTh['lower_price'] = trans('product.lower_price');
+
         if($allowProfits){
             $listTh['profits'] = trans('product.profits');
         }
@@ -183,6 +185,7 @@ class ShopProductController extends Controller
             if(sc_config('product_price')){
                 $dataMap['price'] = $row['price'];
             }
+            $dataMap['lower_price'] = $row['lower_price'];        
             if($allowProfits){
                 $dataMap['profits'] = $row['price'] - $row['cost'] ;
             }
@@ -450,6 +453,7 @@ class ShopProductController extends Controller
             'brand_id' => $data['brand_id']??0,
             'supplier_id' => implode(',', $supplier_id ),
             'price' => $data['price']??0,
+            'lower_price' => $data['lower_price']??0,
             'sku' => $data['sku'],
             'cost' => $data['cost']??0,
             'stock' => $data['stock']??0,
@@ -705,6 +709,7 @@ class ShopProductController extends Controller
             'brand_id' => $data['brand_id'] ?? 0,
             'supplier_id' => implode(',', $supplier_id  ),
             'price' => $data['price'] ?? 0,
+            'lower_price' => $data['lower_price']??0,
             'cost' => $data['cost'] ?? 0,
             'stock' => $data['stock'] ?? 0,
             'type' => $data['type'] ?? SC_PRODUCT_NORMAL,

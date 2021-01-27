@@ -8,6 +8,7 @@ return [
     'alias_validate'        => 'Maximum 100 characters in the group: "A-Z", "a-z", "0-9" and "-_" ',
     'description'           => 'Descripción del producto',
     'price'                 => 'Precio',
+    'lower_price'           => 'Precio minimo',
     'profits'               => 'Ganancia',
     'price_promotion'       => 'Precio de promoción',
     'price_promotion_start' => 'Fecha inicio',

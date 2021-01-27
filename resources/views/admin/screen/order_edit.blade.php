@@ -88,14 +88,14 @@
                     <tr><td>{{ trans('order.shipping_method') }}:</td><td><a href="#" class="updateStatus" data-name="shipping_method" data-type="select" data-source ="{{ json_encode($shippingMethod) }}"  data-pk="{{ $order->id }}" data-value="{!! $order->shipping_method !!}" data-url="{{ route("admin_order.update") }}" data-title="{{ trans('order.shipping_method') }}">{{ $order->shipping_method }}</a></td></tr>
                     <tr><td>{{ trans('order.payment_method') }}:</td><td><a href="#" class="updateStatus" data-name="payment_method" data-type="select" data-source ="{{ json_encode($paymentMethod) }}"  data-pk="{{ $order->id }}" data-value="{!! $order->payment_method !!}" data-url="{{ route("admin_order.update") }}" data-title="{{ trans('order.payment_method') }}">{{ $order->payment_method }}</a></td></tr>
                   </table>
-                 <table class="table table-bordered">
+                 {{-- <table class="table table-bordered">
                     <tr>
                       <td class="td-title">{{ trans('order.currency') }}:</td><td>{{ $order->currency }}</td>
                     </tr>
                     <tr>
                       <td class="td-title">{{ trans('order.exchange_rate') }}:</td><td>{{ ($order->exchange_rate)??1 }}</td>
                     </tr>
-                </table>
+                </table> --}}
             </div>
 
           </div>
@@ -123,6 +123,7 @@
                   <tr>
                     <th>{{ trans('product.name') }}</th>
                     <th>{{ trans('product.sku') }}</th>
+                    <th class="product_lower_price">{{ trans('product.lower_price') }}</th>
                     <th class="product_price">{{ trans('product.price') }}</th>
                     <th class="product_qty">{{ trans('product.quantity') }}</th>
                     <th class="product_total">{{ trans('product.total_price') }}</th>
@@ -149,7 +150,8 @@
                               @endphp
                             {!! $html !!}
                             </td>
-                            <td>{{ $item->sku }}</td>
+                            <td>{{ $item->sku }}</td>                            
+                            <td>{{ sc_currency_render_symbol($item->lower_price,$order->currency) }}</td>                            
                             <td class="product_price"><a href="#" class="edit-item-detail" data-value="{{ $item->price }}" data-name="price" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('product.price') }}">{{ $item->price }}</a></td>
                             <td class="product_qty">x <a href="#" class="edit-item-detail" data-value="{{ $item->qty }}" data-name="qty" data-type="number" min=0 data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.qty') }}"> {{ $item->qty }}</a></td>
                             <td class="product_total item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_price,$order->currency)}}</td>
@@ -292,6 +294,7 @@
               <span class="add_attr"></span>
             </td>
               <td><input type="text" disabled class="add_sku form-control"  value=""></td>
+              <td><input type="text" disabled class="add_lower_price form-control"  value=""></td>
               <td><input onChange="update_total($(this));" type="number" min="0" step="0.01" class="add_price form-control" name="add_price[]" value="0"></td>
               <td><input onChange="update_total($(this));" type="number" min="0" class="add_qty form-control" name="add_qty[]" value="0"></td>
               <td><input type="number" disabled class="add_total form-control" step="0.01" value="0"></td> '
@@ -372,6 +375,7 @@ function update_total(e){
         var id = parseInt(node.find('option:selected').eq(0).val());
         if(id == 0){
             node.find('.add_sku').val('');
+            node.find('.add_lower_price').val('');
             node.find('.add_qty').eq(0).val('');
             node.find('.add_price').eq(0).val('');
             node.find('.add_attr').html('');
@@ -389,6 +393,7 @@ function update_total(e){
             },
             success: function(returnedData){
                 node.find('.add_sku').val(returnedData.sku);
+                node.find('.add_lower_price').val(returnedData.lower_price);
                 node.find('.add_qty').eq(0).val(1);
                 node.find('.add_price').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});
                 node.find('.add_total').eq(0).val(returnedData.price_final * {!! ($order->exchange_rate)??1 !!});

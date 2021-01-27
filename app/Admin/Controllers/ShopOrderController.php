@@ -486,7 +486,7 @@ class ShopOrderController extends Controller
     public function postAddItem()
     {
         $data = request()->all();
-        $add_id = request('add_id');
+        $add_id = request('add_id');        
         $add_price = request('add_price');
         $add_qty = request('add_qty');
         $add_att = request('add_att');
@@ -504,6 +504,7 @@ class ShopOrderController extends Controller
                     'product_id' => $id,
                     'name' => $product->name,
                     'qty' => $add_qty[$key],
+                    'lower_price' => $product->lower_price,
                     'price' => $add_price[$key],
                     'cost' => $product->cost,
                     'total_price' => $add_price[$key] * $add_qty[$key],
