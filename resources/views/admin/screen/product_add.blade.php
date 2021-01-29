@@ -399,6 +399,24 @@
                         {{-- //price --}}
 @endif
 
+{{-- Lower price  --}}
+                <div class="form-group   {{ $errors->has('lower_price') ? ' has-error' : '' }}">
+                    <label for="price" class="col-sm-2 col-form-label">{{ trans('product.lower_price') }}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-pencil fa-fw"></i></span>
+                            <input type="number" style="width: 100px;" id="lower_price" name="lower_price" step="0.01"
+                                value="{!! old('lower_price',0) !!}" class="form-control input-sm price"
+                                placeholder="" />
+                        </div>
+                        @if ($errors->has('lower_price'))
+                        <span class="help-block">
+                            <i class="fa fa-info-circle"></i> {{ $errors->first('lower_price') }}
+                        </span>
+                        @endif
+                    </div>
+                </div>
+                {{-- //Lower price  --}}
 
 @if (sc_config('product_tax'))
                         {{-- select tax --}}
