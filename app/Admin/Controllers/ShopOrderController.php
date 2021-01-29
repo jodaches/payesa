@@ -366,6 +366,7 @@ class ShopOrderController extends Controller
         foreach ($shippingMethodTmp as $key => $value) {
             $shippingMethod[$key] = sc_language_render($value->detail);
         }
+
         return view('admin.screen.order_edit')->with(
             [
                 "title" => trans('order.order_detail'),
@@ -503,8 +504,7 @@ class ShopOrderController extends Controller
                     'order_id' => $order_id,
                     'product_id' => $id,
                     'name' => $product->name,
-                    'qty' => $add_qty[$key],
-                    'lower_price' => $product->lower_price,
+                    'qty' => $add_qty[$key],                    
                     'price' => $add_price[$key],
                     'cost' => $product->cost,
                     'total_price' => $add_price[$key] * $add_qty[$key],
@@ -556,19 +556,25 @@ class ShopOrderController extends Controller
             $item = ShopOrderDetail::find($id);
             $fieldOrg = $item->{$field};
             $orderID = $item->order_id;
+            $product = ShopProduct::find($item->product_id);
 
             //Update stock
             if ($field == 'qty') {
-                if(ShopCart::validateStock($item->product_id, $value, $fieldOrg)){
-                    $checkQty = $value - $fieldOrg;
-                    //Update stock, sold
-                    ShopProduct::updateStock($item->product_id, $checkQty);
-                }else{
+                if(!ShopCart::validateStock($item->product_id, $value, $fieldOrg)){                                
                     $arrayReturn = ['error' => 1, 'msg' => "No hay inventario suficiente"];       
                     return $arrayReturn;             
                 }
+
+                $checkQty = $value - $fieldOrg;
+                //Update stock, sold
+                ShopProduct::updateStock($item->product_id, $checkQty); 
             }
-            $product = ShopProduct::find($item->product_id);
+
+            if($field == 'price' && $product->lower_price > floatval($value)){                                
+                $arrayReturn = ['error' => 1, 'msg' => "El precio de venta es menor al precio minimo"];       
+                return $arrayReturn;             
+            }
+
             //UPDATE ORDER ITEM
             $item->cost = $product->cost;
             $item->{$field} = $value;

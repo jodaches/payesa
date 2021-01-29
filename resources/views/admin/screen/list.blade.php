@@ -86,7 +86,7 @@
                 <th></th>
                 @endif
                 @foreach ($listTh as $key => $th)
-                    <th>{!! $th !!}</th>
+                    <th class="col-{{$key}}">{!! $th !!}</th>
                 @endforeach
                </tr>
             </thead>
@@ -99,7 +99,7 @@
                         </td>
                         @endif
                         @foreach ($tr as $key => $trtd)
-                            <td>{!! $trtd !!}</td>
+                            <td class="col-{{$key}}">{!! $trtd !!}</td>
                         @endforeach
                     </tr>
                 @endforeach

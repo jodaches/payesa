@@ -34,16 +34,22 @@ class ShopOrderDetail extends Model
             $this->insert($data);
             //Update stock, sold
             foreach ($data as $key => $item) {
+                $product = (new ShopProduct)->getDetail($item['product_id']);                
                 $qty = $item['qty'];
                 $product_id = $item['product_id'];
-                if(ShopCart::validateStock($product_id, $qty)){
-                    //Update stock, sold
-                    ShopProduct::updateStock($product_id, $qty);
-                }else{
+
+                if(!ShopCart::validateStock($product_id, $qty)){
                     DB::rollback();
-                    throw new \Exception("No hay inventario suficiente para el producto " . $item['name'], 1);
-                    return;
+                    throw new \Exception("No hay inventario suficiente para el producto " . $item['name'], 1);                    
                 }
+
+                if($product->lower_price > floatval($item['price'])) {
+                    DB::rollback();
+                    throw new \Exception("El precio de venta es menor al precio minimo: " . $item['name'], 1);                    
+                }
+
+                ShopProduct::updateStock($product_id, $qty);
+
             }
         }
         DB::commit();
