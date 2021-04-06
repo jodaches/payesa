@@ -151,7 +151,7 @@
                             {!! $html !!}
                             </td>
                             <td>{{ $item->sku }}</td>                            
-                            <td>{{ sc_currency_render_symbol($item->product->lower_price,$order->currency) }}</td>                            
+                            <td>{{ sc_currency_render_symbol($item->product->lower_price ?? 0,$order->currency) }}</td>                            
                             <td class="product_price"><a href="#" class="edit-item-detail" data-value="{{ $item->price }}" data-name="price" data-type="number" min=0 step="0.01" data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('product.price') }}">{{ $item->price }}</a></td>
                             <td class="product_qty">x <a href="#" class="edit-item-detail" data-value="{{ $item->qty }}" data-name="qty" data-type="number" min=0 data-pk="{{ $item->id }}" data-url="{{ route("admin_order.edit_item") }}" data-title="{{ trans('order.qty') }}"> {{ $item->qty }}</a></td>
                             <td class="product_total item_id_{{ $item->id }}">{{ sc_currency_render_symbol($item->total_price,$order->currency)}}</td>
