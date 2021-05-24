@@ -93,6 +93,8 @@ return [
             'view_asc' => 'View asc',
             'sold_desc' => 'Vendidos desc',
             'sold_asc' => 'Vendidos asc',
+            'stock_asc' => 'Inventario asc',
+            'stock_desc' => 'Inventario desc',
         ],
         'search'                  => 'Buscar',
         'search_place'            => 'Nombre, SKU, ID o palabra clave',

@@ -90,6 +90,8 @@ return [
             'view_asc' => 'View asc',
             'sold_desc' => 'Sold desc',
             'sold_asc' => 'Sold asc',
+            'stock_asc' => 'Stock asc',
+            'stock_desc' => 'Stock desc',
         ],
         'search'                  => 'Search',
         'search_place'            => 'Search Name, SKU or ID',

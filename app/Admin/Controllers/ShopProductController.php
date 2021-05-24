@@ -114,6 +114,8 @@ class ShopProductController extends Controller
             'id__asc' => trans('product.admin.sort_order.id_asc'),
             'name__desc' => trans('product.admin.sort_order.name_desc'),
             'name__asc' => trans('product.admin.sort_order.name_asc'),
+            'stock__asc' => trans('product.admin.sort_order.stock_asc'),
+            'stock__desc' => trans('product.admin.sort_order.stock_desc'),
         ];
 
 
